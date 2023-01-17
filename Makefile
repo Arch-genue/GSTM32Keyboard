@@ -15,7 +15,6 @@
 ######################################
 TARGET = firmware
 
-
 ######################################
 # building variables
 ######################################
@@ -127,10 +126,8 @@ ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
 endif
 
-
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
-
 
 #######################################
 # LDFLAGS
