@@ -1,3 +1,5 @@
-.vscode/
 build/
 .settings/
+.vscode/
+.project.bak
+.cproject.bak
