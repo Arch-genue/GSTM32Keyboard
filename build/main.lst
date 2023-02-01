@@ -1,0 +1,1101 @@
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main.c"
+  16              		.text
+  17              		.section	.text.usDelay,"ax",%progbits
+  18              		.align	1
+  19              		.global	usDelay
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	usDelay:
+  25              		@ args = 0, pretend = 0, frame = 0
+  26              		@ frame_needed = 0, uses_anonymous_args = 0
+  27              		@ link register save eliminated.
+  28 0000 034B     		ldr	r3, .L3
+  29 0002 1A68     		ldr	r2, [r3]
+  30 0004 0023     		movs	r3, #0
+  31 0006 5362     		str	r3, [r2, #36]
+  32              	.L2:
+  33 0008 536A     		ldr	r3, [r2, #36]
+  34 000a 8342     		cmp	r3, r0
+  35 000c FCD3     		bcc	.L2
+  36 000e 7047     		bx	lr
+  37              	.L4:
+  38              		.align	2
+  39              	.L3:
+  40 0010 00000000 		.word	htim10
+  42              		.section	.text.ledView,"ax",%progbits
+  43              		.align	1
+  44              		.global	ledView
+  45              		.syntax unified
+  46              		.thumb
+  47              		.thumb_func
+  49              	ledView:
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  53 0000 00EB8000 		add	r0, r0, r0, lsl #2
+  54 0004 024B     		ldr	r3, .L6
+  55 0006 03EB4000 		add	r0, r3, r0, lsl #1
+  56 000a 4254     		strb	r2, [r0, r1]
+  57 000c 7047     		bx	lr
+  58              	.L7:
+  59 000e 00BF     		.align	2
+  60              	.L6:
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 2
+
+
+  61 0010 00000000 		.word	.LANCHOR0
+  63              		.section	.text.ledsAll,"ax",%progbits
+  64              		.align	1
+  65              		.global	ledsAll
+  66              		.syntax unified
+  67              		.thumb
+  68              		.thumb_func
+  70              	ledsAll:
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74 0000 4FF0000C 		mov	ip, #0
+  75 0004 0DE0     		b	.L9
+  76              	.L10:
+  77 0006 0CEB8C02 		add	r2, ip, ip, lsl #2
+  78 000a 0949     		ldr	r1, .L14
+  79 000c 01EB4202 		add	r2, r1, r2, lsl #1
+  80 0010 D054     		strb	r0, [r2, r3]
+  81 0012 0133     		adds	r3, r3, #1
+  82 0014 DBB2     		uxtb	r3, r3
+  83              	.L11:
+  84 0016 092B     		cmp	r3, #9
+  85 0018 F5D9     		bls	.L10
+  86 001a 0CF1010C 		add	ip, ip, #1
+  87 001e 5FFA8CFC 		uxtb	ip, ip
+  88              	.L9:
+  89 0022 BCF10F0F 		cmp	ip, #15
+  90 0026 01D8     		bhi	.L13
+  91 0028 0023     		movs	r3, #0
+  92 002a F4E7     		b	.L11
+  93              	.L13:
+  94 002c 7047     		bx	lr
+  95              	.L15:
+  96 002e 00BF     		.align	2
+  97              	.L14:
+  98 0030 00000000 		.word	.LANCHOR0
+ 100              		.section	.text.receiveData,"ax",%progbits
+ 101              		.align	1
+ 102              		.global	receiveData
+ 103              		.syntax unified
+ 104              		.thumb
+ 105              		.thumb_func
+ 107              	receiveData:
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110 0000 08B5     		push	{r3, lr}
+ 111 0002 0322     		movs	r2, #3
+ 112 0004 1349     		ldr	r1, .L24
+ 113 0006 1448     		ldr	r0, .L24+4
+ 114 0008 FFF7FEFF 		bl	HAL_UART_Receive_IT
+ 115 000c 0228     		cmp	r0, #2
+ 116 000e 09D0     		beq	.L16
+ 117 0010 104B     		ldr	r3, .L24
+ 118 0012 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 119 0014 AA28     		cmp	r0, #170
+ 120 0016 06D0     		beq	.L21
+ 121              	.L18:
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 3
+
+
+ 122 0018 0F28     		cmp	r0, #15
+ 123 001a 03D8     		bhi	.L16
+ 124 001c 0D4B     		ldr	r3, .L24
+ 125 001e 5978     		ldrb	r1, [r3, #1]	@ zero_extendqisi2
+ 126 0020 0929     		cmp	r1, #9
+ 127 0022 0FD9     		bls	.L22
+ 128              	.L16:
+ 129 0024 08BD     		pop	{r3, pc}
+ 130              	.L21:
+ 131 0026 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 132 0028 BB2B     		cmp	r3, #187
+ 133 002a F5D1     		bne	.L18
+ 134 002c 094B     		ldr	r3, .L24
+ 135 002e 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 136 0030 FF2B     		cmp	r3, #255
+ 137 0032 03D0     		beq	.L23
+ 138 0034 0120     		movs	r0, #1
+ 139 0036 FFF7FEFF 		bl	ledsAll
+ 140 003a F3E7     		b	.L16
+ 141              	.L23:
+ 142 003c 0020     		movs	r0, #0
+ 143 003e FFF7FEFF 		bl	ledsAll
+ 144 0042 EFE7     		b	.L16
+ 145              	.L22:
+ 146 0044 9A78     		ldrb	r2, [r3, #2]	@ zero_extendqisi2
+ 147 0046 FF3A     		subs	r2, r2, #255
+ 148 0048 18BF     		it	ne
+ 149 004a 0122     		movne	r2, #1
+ 150 004c FFF7FEFF 		bl	ledView
+ 151 0050 E8E7     		b	.L16
+ 152              	.L25:
+ 153 0052 00BF     		.align	2
+ 154              	.L24:
+ 155 0054 00000000 		.word	.LANCHOR1
+ 156 0058 00000000 		.word	huart1
+ 158              		.section	.text.sendKeyboardData,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	sendKeyboardData
+ 161              		.syntax unified
+ 162              		.thumb
+ 163              		.thumb_func
+ 165              	sendKeyboardData:
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168 0000 38B5     		push	{r3, r4, r5, lr}
+ 169 0002 0025     		movs	r5, #0
+ 170 0004 25E0     		b	.L27
+ 171              	.L44:
+ 172 0006 FF23     		movs	r3, #255
+ 173              	.L29:
+ 174 0008 2949     		ldr	r1, .L49
+ 175 000a 8B70     		strb	r3, [r1, #2]
+ 176 000c 02EBC202 		add	r2, r2, r2, lsl #3
+ 177 0010 284B     		ldr	r3, .L49+4
+ 178 0012 1A44     		add	r2, r2, r3
+ 179 0014 0023     		movs	r3, #0
+ 180 0016 1354     		strb	r3, [r2, r0]
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 4
+
+
+ 181 0018 0322     		movs	r2, #3
+ 182 001a 2748     		ldr	r0, .L49+8
+ 183 001c FFF7FEFF 		bl	HAL_UART_Transmit_IT
+ 184              	.L28:
+ 185 0020 0134     		adds	r4, r4, #1
+ 186 0022 E4B2     		uxtb	r4, r4
+ 187              	.L31:
+ 188 0024 082C     		cmp	r4, #8
+ 189 0026 12D8     		bhi	.L43
+ 190 0028 2A46     		mov	r2, r5
+ 191 002a 2046     		mov	r0, r4
+ 192 002c 05EBC501 		add	r1, r5, r5, lsl #3
+ 193 0030 204B     		ldr	r3, .L49+4
+ 194 0032 0B44     		add	r3, r3, r1
+ 195 0034 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 196 0036 012B     		cmp	r3, #1
+ 197 0038 F2D1     		bne	.L28
+ 198 003a 1D4B     		ldr	r3, .L49
+ 199 003c 1D70     		strb	r5, [r3]
+ 200 003e 5C70     		strb	r4, [r3, #1]
+ 201 0040 1E4B     		ldr	r3, .L49+12
+ 202 0042 0B44     		add	r3, r3, r1
+ 203 0044 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 204 0046 012B     		cmp	r3, #1
+ 205 0048 DDD0     		beq	.L44
+ 206 004a 0023     		movs	r3, #0
+ 207 004c DCE7     		b	.L29
+ 208              	.L43:
+ 209 004e 0135     		adds	r5, r5, #1
+ 210 0050 EDB2     		uxtb	r5, r5
+ 211              	.L27:
+ 212 0052 0F2D     		cmp	r5, #15
+ 213 0054 01D8     		bhi	.L45
+ 214 0056 0024     		movs	r4, #0
+ 215 0058 E4E7     		b	.L31
+ 216              	.L45:
+ 217 005a 0024     		movs	r4, #0
+ 218 005c 14E0     		b	.L32
+ 219              	.L48:
+ 220 005e AC21     		movs	r1, #172
+ 221 0060 00E0     		b	.L34
+ 222              	.L39:
+ 223 0062 AB21     		movs	r1, #171
+ 224              	.L34:
+ 225 0064 124B     		ldr	r3, .L49
+ 226 0066 5970     		strb	r1, [r3, #1]
+ 227 0068 154B     		ldr	r3, .L49+16
+ 228 006a 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 229 006c 012B     		cmp	r3, #1
+ 230 006e 1BD0     		beq	.L46
+ 231 0070 0023     		movs	r3, #0
+ 232              	.L35:
+ 233 0072 0F49     		ldr	r1, .L49
+ 234 0074 8B70     		strb	r3, [r1, #2]
+ 235 0076 134B     		ldr	r3, .L49+20
+ 236 0078 0020     		movs	r0, #0
+ 237 007a 9854     		strb	r0, [r3, r2]
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 5
+
+
+ 238 007c 0322     		movs	r2, #3
+ 239 007e 0E48     		ldr	r0, .L49+8
+ 240 0080 FFF7FEFF 		bl	HAL_UART_Transmit_IT
+ 241              	.L33:
+ 242 0084 0134     		adds	r4, r4, #1
+ 243 0086 E4B2     		uxtb	r4, r4
+ 244              	.L32:
+ 245 0088 022C     		cmp	r4, #2
+ 246 008a 0FD8     		bhi	.L47
+ 247 008c 2246     		mov	r2, r4
+ 248 008e 0D4B     		ldr	r3, .L49+20
+ 249 0090 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 250 0092 012B     		cmp	r3, #1
+ 251 0094 F6D1     		bne	.L33
+ 252 0096 064B     		ldr	r3, .L49
+ 253 0098 AA21     		movs	r1, #170
+ 254 009a 1970     		strb	r1, [r3]
+ 255 009c 002C     		cmp	r4, #0
+ 256 009e E0D0     		beq	.L39
+ 257 00a0 012C     		cmp	r4, #1
+ 258 00a2 DCD0     		beq	.L48
+ 259 00a4 AD21     		movs	r1, #173
+ 260 00a6 DDE7     		b	.L34
+ 261              	.L46:
+ 262 00a8 FF23     		movs	r3, #255
+ 263 00aa E2E7     		b	.L35
+ 264              	.L47:
+ 265 00ac 38BD     		pop	{r3, r4, r5, pc}
+ 266              	.L50:
+ 267 00ae 00BF     		.align	2
+ 268              	.L49:
+ 269 00b0 00000000 		.word	.LANCHOR3
+ 270 00b4 00000000 		.word	.LANCHOR2
+ 271 00b8 00000000 		.word	huart1
+ 272 00bc 00000000 		.word	.LANCHOR4
+ 273 00c0 00000000 		.word	.LANCHOR6
+ 274 00c4 00000000 		.word	.LANCHOR5
+ 276              		.section	.text.scanKeyboard,"ax",%progbits
+ 277              		.align	1
+ 278              		.global	scanKeyboard
+ 279              		.syntax unified
+ 280              		.thumb
+ 281              		.thumb_func
+ 283              	scanKeyboard:
+ 284              		@ args = 0, pretend = 0, frame = 0
+ 285              		@ frame_needed = 0, uses_anonymous_args = 0
+ 286 0000 10B5     		push	{r4, lr}
+ 287 0002 3220     		movs	r0, #50
+ 288 0004 FFF7FEFF 		bl	usDelay
+ 289 0008 0024     		movs	r4, #0
+ 290 000a 0AE0     		b	.L52
+ 291              	.L53:
+ 292 000c 474B     		ldr	r3, .L65
+ 293 000e 03EBC402 		add	r2, r3, r4, lsl #3
+ 294 0012 9188     		ldrh	r1, [r2, #4]
+ 295 0014 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 296 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 6
+
+
+ 297 001c 0128     		cmp	r0, #1
+ 298 001e 16D0     		beq	.L61
+ 299              	.L54:
+ 300 0020 0134     		adds	r4, r4, #1
+ 301              	.L52:
+ 302 0022 022C     		cmp	r4, #2
+ 303 0024 1EDC     		bgt	.L62
+ 304 0026 414B     		ldr	r3, .L65
+ 305 0028 03EBC402 		add	r2, r3, r4, lsl #3
+ 306 002c 9188     		ldrh	r1, [r2, #4]
+ 307 002e 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 308 0032 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 309 0036 0028     		cmp	r0, #0
+ 310 0038 E8D1     		bne	.L53
+ 311 003a 3D4B     		ldr	r3, .L65+4
+ 312 003c 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 313 003e 002B     		cmp	r3, #0
+ 314 0040 E4D1     		bne	.L53
+ 315 0042 0123     		movs	r3, #1
+ 316 0044 3A4A     		ldr	r2, .L65+4
+ 317 0046 1355     		strb	r3, [r2, r4]
+ 318 0048 3A4A     		ldr	r2, .L65+8
+ 319 004a 1355     		strb	r3, [r2, r4]
+ 320 004c E8E7     		b	.L54
+ 321              	.L61:
+ 322 004e 384B     		ldr	r3, .L65+4
+ 323 0050 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 324 0052 012B     		cmp	r3, #1
+ 325 0054 E4D1     		bne	.L54
+ 326 0056 364B     		ldr	r3, .L65+4
+ 327 0058 0022     		movs	r2, #0
+ 328 005a 1A55     		strb	r2, [r3, r4]
+ 329 005c 354B     		ldr	r3, .L65+8
+ 330 005e 0122     		movs	r2, #1
+ 331 0060 1A55     		strb	r2, [r3, r4]
+ 332 0062 DDE7     		b	.L54
+ 333              	.L62:
+ 334 0064 0024     		movs	r4, #0
+ 335 0066 0AE0     		b	.L56
+ 336              	.L57:
+ 337 0068 334B     		ldr	r3, .L65+12
+ 338 006a 03EBC402 		add	r2, r3, r4, lsl #3
+ 339 006e 9188     		ldrh	r1, [r2, #4]
+ 340 0070 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 341 0074 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 342 0078 0128     		cmp	r0, #1
+ 343 007a 2FD0     		beq	.L63
+ 344              	.L58:
+ 345 007c 0134     		adds	r4, r4, #1
+ 346              	.L56:
+ 347 007e 082C     		cmp	r4, #8
+ 348 0080 50DC     		bgt	.L64
+ 349 0082 2D4B     		ldr	r3, .L65+12
+ 350 0084 03EBC402 		add	r2, r3, r4, lsl #3
+ 351 0088 9188     		ldrh	r1, [r2, #4]
+ 352 008a 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 353 008e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 7
+
+
+ 354 0092 0028     		cmp	r0, #0
+ 355 0094 E8D1     		bne	.L57
+ 356 0096 294B     		ldr	r3, .L65+16
+ 357 0098 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 358 009a 03EBC303 		add	r3, r3, r3, lsl #3
+ 359 009e 284A     		ldr	r2, .L65+20
+ 360 00a0 1344     		add	r3, r3, r2
+ 361 00a2 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 362 00a4 002B     		cmp	r3, #0
+ 363 00a6 DFD1     		bne	.L57
+ 364 00a8 4FF49670 		mov	r0, #300
+ 365 00ac FFF7FEFF 		bl	usDelay
+ 366 00b0 214B     		ldr	r3, .L65+12
+ 367 00b2 03EBC402 		add	r2, r3, r4, lsl #3
+ 368 00b6 9188     		ldrh	r1, [r2, #4]
+ 369 00b8 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 370 00bc FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 371 00c0 0028     		cmp	r0, #0
+ 372 00c2 DBD1     		bne	.L58
+ 373 00c4 1D4B     		ldr	r3, .L65+16
+ 374 00c6 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 375 00c8 03EBC303 		add	r3, r3, r3, lsl #3
+ 376 00cc 1C4A     		ldr	r2, .L65+20
+ 377 00ce 1A44     		add	r2, r2, r3
+ 378 00d0 0121     		movs	r1, #1
+ 379 00d2 1155     		strb	r1, [r2, r4]
+ 380 00d4 1B4A     		ldr	r2, .L65+24
+ 381 00d6 1344     		add	r3, r3, r2
+ 382 00d8 1955     		strb	r1, [r3, r4]
+ 383 00da CFE7     		b	.L58
+ 384              	.L63:
+ 385 00dc 174B     		ldr	r3, .L65+16
+ 386 00de 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 387 00e0 03EBC303 		add	r3, r3, r3, lsl #3
+ 388 00e4 164A     		ldr	r2, .L65+20
+ 389 00e6 1344     		add	r3, r3, r2
+ 390 00e8 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+ 391 00ea 012B     		cmp	r3, #1
+ 392 00ec C6D1     		bne	.L58
+ 393 00ee 4FF49670 		mov	r0, #300
+ 394 00f2 FFF7FEFF 		bl	usDelay
+ 395 00f6 104B     		ldr	r3, .L65+12
+ 396 00f8 03EBC402 		add	r2, r3, r4, lsl #3
+ 397 00fc 9188     		ldrh	r1, [r2, #4]
+ 398 00fe 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 399 0102 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 400 0106 0128     		cmp	r0, #1
+ 401 0108 B8D1     		bne	.L58
+ 402 010a 0C4B     		ldr	r3, .L65+16
+ 403 010c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 404 010e 03EBC303 		add	r3, r3, r3, lsl #3
+ 405 0112 0B4A     		ldr	r2, .L65+20
+ 406 0114 1A44     		add	r2, r2, r3
+ 407 0116 0021     		movs	r1, #0
+ 408 0118 1155     		strb	r1, [r2, r4]
+ 409 011a 0A4A     		ldr	r2, .L65+24
+ 410 011c 1344     		add	r3, r3, r2
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 8
+
+
+ 411 011e 0122     		movs	r2, #1
+ 412 0120 1A55     		strb	r2, [r3, r4]
+ 413 0122 ABE7     		b	.L58
+ 414              	.L64:
+ 415 0124 6420     		movs	r0, #100
+ 416 0126 FFF7FEFF 		bl	usDelay
+ 417 012a 10BD     		pop	{r4, pc}
+ 418              	.L66:
+ 419              		.align	2
+ 420              	.L65:
+ 421 012c 00000000 		.word	.LANCHOR7
+ 422 0130 00000000 		.word	.LANCHOR6
+ 423 0134 00000000 		.word	.LANCHOR5
+ 424 0138 00000000 		.word	.LANCHOR8
+ 425 013c 00000000 		.word	.LANCHOR9
+ 426 0140 00000000 		.word	.LANCHOR4
+ 427 0144 00000000 		.word	.LANCHOR2
+ 429              		.section	.text.ledsView,"ax",%progbits
+ 430              		.align	1
+ 431              		.global	ledsView
+ 432              		.syntax unified
+ 433              		.thumb
+ 434              		.thumb_func
+ 436              	ledsView:
+ 437              		@ args = 0, pretend = 0, frame = 0
+ 438              		@ frame_needed = 0, uses_anonymous_args = 0
+ 439 0000 10B5     		push	{r4, lr}
+ 440 0002 0024     		movs	r4, #0
+ 441 0004 10E0     		b	.L68
+ 442              	.L69:
+ 443 0006 1D4B     		ldr	r3, .L75
+ 444 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 445 000a 03EB8303 		add	r3, r3, r3, lsl #2
+ 446 000e 5A00     		lsls	r2, r3, #1
+ 447 0010 1B4B     		ldr	r3, .L75+4
+ 448 0012 1344     		add	r3, r3, r2
+ 449 0014 1B48     		ldr	r0, .L75+8
+ 450 0016 00EBC401 		add	r1, r0, r4, lsl #3
+ 451 001a 1A5D     		ldrb	r2, [r3, r4]	@ zero_extendqisi2
+ 452 001c 8988     		ldrh	r1, [r1, #4]
+ 453 001e 50F83400 		ldr	r0, [r0, r4, lsl #3]
+ 454 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 455 0026 0134     		adds	r4, r4, #1
+ 456              	.L68:
+ 457 0028 092C     		cmp	r4, #9
+ 458 002a ECDD     		ble	.L69
+ 459 002c 0024     		movs	r4, #0
+ 460 002e 0CE0     		b	.L70
+ 461              	.L71:
+ 462 0030 134B     		ldr	r3, .L75+4
+ 463 0032 2344     		add	r3, r3, r4
+ 464 0034 1448     		ldr	r0, .L75+12
+ 465 0036 00EBC401 		add	r1, r0, r4, lsl #3
+ 466 003a 93F84620 		ldrb	r2, [r3, #70]	@ zero_extendqisi2
+ 467 003e 8988     		ldrh	r1, [r1, #4]
+ 468 0040 50F83400 		ldr	r0, [r0, r4, lsl #3]
+ 469 0044 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 9
+
+
+ 470 0048 0134     		adds	r4, r4, #1
+ 471              	.L70:
+ 472 004a 032C     		cmp	r4, #3
+ 473 004c F0DD     		ble	.L71
+ 474 004e 4FF41670 		mov	r0, #600
+ 475 0052 FFF7FEFF 		bl	usDelay
+ 476 0056 0024     		movs	r4, #0
+ 477 0058 09E0     		b	.L72
+ 478              	.L73:
+ 479 005a 0A4B     		ldr	r3, .L75+8
+ 480 005c 03EBC401 		add	r1, r3, r4, lsl #3
+ 481 0060 0122     		movs	r2, #1
+ 482 0062 8988     		ldrh	r1, [r1, #4]
+ 483 0064 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 484 0068 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 485 006c 0134     		adds	r4, r4, #1
+ 486              	.L72:
+ 487 006e 092C     		cmp	r4, #9
+ 488 0070 F3DD     		ble	.L73
+ 489 0072 C820     		movs	r0, #200
+ 490 0074 FFF7FEFF 		bl	usDelay
+ 491 0078 10BD     		pop	{r4, pc}
+ 492              	.L76:
+ 493 007a 00BF     		.align	2
+ 494              	.L75:
+ 495 007c 00000000 		.word	.LANCHOR9
+ 496 0080 00000000 		.word	.LANCHOR0
+ 497 0084 00000000 		.word	.LANCHOR10
+ 498 0088 00000000 		.word	.LANCHOR11
+ 500              		.section	.text.Error_Handler,"ax",%progbits
+ 501              		.align	1
+ 502              		.global	Error_Handler
+ 503              		.syntax unified
+ 504              		.thumb
+ 505              		.thumb_func
+ 507              	Error_Handler:
+ 508              		@ Volatile: function does not return.
+ 509              		@ args = 0, pretend = 0, frame = 0
+ 510              		@ frame_needed = 0, uses_anonymous_args = 0
+ 511              		@ link register save eliminated.
+ 512              		.syntax unified
+ 513              	@ 142 "/home/user/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 514 0000 72B6     		cpsid i
+ 515              	@ 0 "" 2
+ 516              		.thumb
+ 517              		.syntax unified
+ 518              	.L78:
+ 519 0002 FEE7     		b	.L78
+ 521              		.section	.text.SystemClock_Config,"ax",%progbits
+ 522              		.align	1
+ 523              		.global	SystemClock_Config
+ 524              		.syntax unified
+ 525              		.thumb
+ 526              		.thumb_func
+ 528              	SystemClock_Config:
+ 529              		@ args = 0, pretend = 0, frame = 80
+ 530              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 10
+
+
+ 531 0000 00B5     		push	{lr}
+ 532 0002 95B0     		sub	sp, sp, #84
+ 533 0004 3022     		movs	r2, #48
+ 534 0006 0021     		movs	r1, #0
+ 535 0008 08A8     		add	r0, sp, #32
+ 536 000a FFF7FEFF 		bl	memset
+ 537 000e 0023     		movs	r3, #0
+ 538 0010 0393     		str	r3, [sp, #12]
+ 539 0012 0493     		str	r3, [sp, #16]
+ 540 0014 0593     		str	r3, [sp, #20]
+ 541 0016 0693     		str	r3, [sp, #24]
+ 542 0018 0793     		str	r3, [sp, #28]
+ 543 001a 0193     		str	r3, [sp, #4]
+ 544 001c 1F4A     		ldr	r2, .L85
+ 545 001e 116C     		ldr	r1, [r2, #64]
+ 546 0020 41F08051 		orr	r1, r1, #268435456
+ 547 0024 1164     		str	r1, [r2, #64]
+ 548 0026 126C     		ldr	r2, [r2, #64]
+ 549 0028 02F08052 		and	r2, r2, #268435456
+ 550 002c 0192     		str	r2, [sp, #4]
+ 551 002e 019A     		ldr	r2, [sp, #4]
+ 552 0030 0293     		str	r3, [sp, #8]
+ 553 0032 1B4A     		ldr	r2, .L85+4
+ 554 0034 1168     		ldr	r1, [r2]
+ 555 0036 41F48041 		orr	r1, r1, #16384
+ 556 003a 1160     		str	r1, [r2]
+ 557 003c 1268     		ldr	r2, [r2]
+ 558 003e 02F48042 		and	r2, r2, #16384
+ 559 0042 0292     		str	r2, [sp, #8]
+ 560 0044 029A     		ldr	r2, [sp, #8]
+ 561 0046 0222     		movs	r2, #2
+ 562 0048 0892     		str	r2, [sp, #32]
+ 563 004a 0121     		movs	r1, #1
+ 564 004c 0B91     		str	r1, [sp, #44]
+ 565 004e 1021     		movs	r1, #16
+ 566 0050 0C91     		str	r1, [sp, #48]
+ 567 0052 0E92     		str	r2, [sp, #56]
+ 568 0054 0F93     		str	r3, [sp, #60]
+ 569 0056 0823     		movs	r3, #8
+ 570 0058 1093     		str	r3, [sp, #64]
+ 571 005a A823     		movs	r3, #168
+ 572 005c 1193     		str	r3, [sp, #68]
+ 573 005e 1292     		str	r2, [sp, #72]
+ 574 0060 0423     		movs	r3, #4
+ 575 0062 1393     		str	r3, [sp, #76]
+ 576 0064 08A8     		add	r0, sp, #32
+ 577 0066 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 578 006a 98B9     		cbnz	r0, .L83
+ 579 006c 0F23     		movs	r3, #15
+ 580 006e 0393     		str	r3, [sp, #12]
+ 581 0070 0223     		movs	r3, #2
+ 582 0072 0493     		str	r3, [sp, #16]
+ 583 0074 0023     		movs	r3, #0
+ 584 0076 0593     		str	r3, [sp, #20]
+ 585 0078 4FF4A053 		mov	r3, #5120
+ 586 007c 0693     		str	r3, [sp, #24]
+ 587 007e 4FF48053 		mov	r3, #4096
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 11
+
+
+ 588 0082 0793     		str	r3, [sp, #28]
+ 589 0084 0521     		movs	r1, #5
+ 590 0086 03A8     		add	r0, sp, #12
+ 591 0088 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 592 008c 20B9     		cbnz	r0, .L84
+ 593 008e 15B0     		add	sp, sp, #84
+ 594              		@ sp needed
+ 595 0090 5DF804FB 		ldr	pc, [sp], #4
+ 596              	.L83:
+ 597 0094 FFF7FEFF 		bl	Error_Handler
+ 598              	.L84:
+ 599 0098 FFF7FEFF 		bl	Error_Handler
+ 600              	.L86:
+ 601              		.align	2
+ 602              	.L85:
+ 603 009c 00380240 		.word	1073887232
+ 604 00a0 00700040 		.word	1073770496
+ 606              		.section	.text.main,"ax",%progbits
+ 607              		.align	1
+ 608              		.global	main
+ 609              		.syntax unified
+ 610              		.thumb
+ 611              		.thumb_func
+ 613              	main:
+ 614              		@ args = 0, pretend = 0, frame = 0
+ 615              		@ frame_needed = 0, uses_anonymous_args = 0
+ 616 0000 10B5     		push	{r4, lr}
+ 617 0002 FFF7FEFF 		bl	HAL_Init
+ 618 0006 FFF7FEFF 		bl	SystemClock_Config
+ 619 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 620 000e FFF7FEFF 		bl	MX_USART1_UART_Init
+ 621 0012 FFF7FEFF 		bl	MX_TIM10_Init
+ 622 0016 FFF7FEFF 		bl	MX_TIM1_Init
+ 623 001a 4048     		ldr	r0, .L106
+ 624 001c FFF7FEFF 		bl	HAL_TIM_Base_Start
+ 625 0020 3C21     		movs	r1, #60
+ 626 0022 3F48     		ldr	r0, .L106+4
+ 627 0024 FFF7FEFF 		bl	HAL_TIM_Encoder_Start
+ 628 0028 0024     		movs	r4, #0
+ 629 002a 09E0     		b	.L88
+ 630              	.L89:
+ 631 002c 3D4B     		ldr	r3, .L106+8
+ 632 002e 03EBC401 		add	r1, r3, r4, lsl #3
+ 633 0032 0122     		movs	r2, #1
+ 634 0034 8988     		ldrh	r1, [r1, #4]
+ 635 0036 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 636 003a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 637 003e 0134     		adds	r4, r4, #1
+ 638              	.L88:
+ 639 0040 0F2C     		cmp	r4, #15
+ 640 0042 F3DD     		ble	.L89
+ 641 0044 0024     		movs	r4, #0
+ 642 0046 09E0     		b	.L90
+ 643              	.L91:
+ 644 0048 374B     		ldr	r3, .L106+12
+ 645 004a 03EBC401 		add	r1, r3, r4, lsl #3
+ 646 004e 0122     		movs	r2, #1
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 12
+
+
+ 647 0050 8988     		ldrh	r1, [r1, #4]
+ 648 0052 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 649 0056 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 650 005a 0134     		adds	r4, r4, #1
+ 651              	.L90:
+ 652 005c 092C     		cmp	r4, #9
+ 653 005e F3DD     		ble	.L91
+ 654 0060 4FF0000E 		mov	lr, #0
+ 655 0064 0DE0     		b	.L92
+ 656              	.L93:
+ 657 0066 0EEBCE0C 		add	ip, lr, lr, lsl #3
+ 658 006a 3049     		ldr	r1, .L106+16
+ 659 006c 6144     		add	r1, r1, ip
+ 660 006e 0020     		movs	r0, #0
+ 661 0070 C854     		strb	r0, [r1, r3]
+ 662 0072 2F4A     		ldr	r2, .L106+20
+ 663 0074 6244     		add	r2, r2, ip
+ 664 0076 D054     		strb	r0, [r2, r3]
+ 665 0078 0133     		adds	r3, r3, #1
+ 666              	.L94:
+ 667 007a 082B     		cmp	r3, #8
+ 668 007c F3DD     		ble	.L93
+ 669 007e 0EF1010E 		add	lr, lr, #1
+ 670              	.L92:
+ 671 0082 BEF10F0F 		cmp	lr, #15
+ 672 0086 01DC     		bgt	.L103
+ 673 0088 0023     		movs	r3, #0
+ 674 008a F6E7     		b	.L94
+ 675              	.L103:
+ 676 008c 0120     		movs	r0, #1
+ 677 008e FFF7FEFF 		bl	ledsAll
+ 678 0092 0024     		movs	r4, #0
+ 679 0094 09E0     		b	.L95
+ 680              	.L96:
+ 681 0096 274B     		ldr	r3, .L106+24
+ 682 0098 03EBC401 		add	r1, r3, r4, lsl #3
+ 683 009c 0022     		movs	r2, #0
+ 684 009e 8988     		ldrh	r1, [r1, #4]
+ 685 00a0 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ 686 00a4 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 687 00a8 0134     		adds	r4, r4, #1
+ 688              	.L95:
+ 689 00aa 032C     		cmp	r4, #3
+ 690 00ac F3DD     		ble	.L96
+ 691 00ae 0124     		movs	r4, #1
+ 692 00b0 0CE0     		b	.L100
+ 693              	.L104:
+ 694 00b2 214B     		ldr	r3, .L106+28
+ 695 00b4 0022     		movs	r2, #0
+ 696 00b6 1A70     		strb	r2, [r3]
+ 697 00b8 84F00104 		eor	r4, r4, #1
+ 698 00bc 0EE0     		b	.L97
+ 699              	.L105:
+ 700 00be FFF7FEFF 		bl	scanKeyboard
+ 701 00c2 18E0     		b	.L98
+ 702              	.L99:
+ 703 00c4 1C4A     		ldr	r2, .L106+28
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 13
+
+
+ 704 00c6 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 705 00c8 0133     		adds	r3, r3, #1
+ 706 00ca 1370     		strb	r3, [r2]
+ 707              	.L100:
+ 708 00cc FFF7FEFF 		bl	receiveData
+ 709 00d0 FFF7FEFF 		bl	sendKeyboardData
+ 710 00d4 184B     		ldr	r3, .L106+28
+ 711 00d6 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 712 00d8 102B     		cmp	r3, #16
+ 713 00da EAD0     		beq	.L104
+ 714              	.L97:
+ 715 00dc 164B     		ldr	r3, .L106+28
+ 716 00de 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 717 00e0 104B     		ldr	r3, .L106+8
+ 718 00e2 03EBC001 		add	r1, r3, r0, lsl #3
+ 719 00e6 0022     		movs	r2, #0
+ 720 00e8 8988     		ldrh	r1, [r1, #4]
+ 721 00ea 53F83000 		ldr	r0, [r3, r0, lsl #3]
+ 722 00ee FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 723 00f2 002C     		cmp	r4, #0
+ 724 00f4 E3D1     		bne	.L105
+ 725              	.L98:
+ 726 00f6 104B     		ldr	r3, .L106+28
+ 727 00f8 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 728 00fa 0A4B     		ldr	r3, .L106+8
+ 729 00fc 03EBC001 		add	r1, r3, r0, lsl #3
+ 730 0100 0122     		movs	r2, #1
+ 731 0102 8988     		ldrh	r1, [r1, #4]
+ 732 0104 53F83000 		ldr	r0, [r3, r0, lsl #3]
+ 733 0108 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 734 010c 002C     		cmp	r4, #0
+ 735 010e D9D1     		bne	.L99
+ 736 0110 4FF4FA70 		mov	r0, #500
+ 737 0114 FFF7FEFF 		bl	usDelay
+ 738 0118 D4E7     		b	.L99
+ 739              	.L107:
+ 740 011a 00BF     		.align	2
+ 741              	.L106:
+ 742 011c 00000000 		.word	htim10
+ 743 0120 00000000 		.word	htim1
+ 744 0124 00000000 		.word	.LANCHOR12
+ 745 0128 00000000 		.word	.LANCHOR10
+ 746 012c 00000000 		.word	.LANCHOR4
+ 747 0130 00000000 		.word	.LANCHOR2
+ 748 0134 00000000 		.word	.LANCHOR11
+ 749 0138 00000000 		.word	.LANCHOR9
+ 751              		.global	Enc_Counter
+ 752              		.global	prevCounter
+ 753              		.global	txbuff
+ 754              		.global	mkr
+ 755              		.global	rptcnt
+ 756              		.global	flagChgEKeys
+ 757              		.global	flagEKeys
+ 758              		.global	flagChg
+ 759              		.global	flag
+ 760              		.global	ledmatrix
+ 761              		.global	ledsaddr
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 14
+
+
+ 762              		.global	keycols
+ 763              		.global	keyin
+ 764              		.global	leds
+ 765              		.global	keyout
+ 766              		.global	ekeysleds
+ 767              		.global	ekeys
+ 768              		.section	.bss.Enc_Counter,"aw",%nobits
+ 771              	Enc_Counter:
+ 772 0000 00       		.space	1
+ 773              		.section	.bss.flag,"aw",%nobits
+ 774              		.align	2
+ 775              		.set	.LANCHOR4,. + 0
+ 778              	flag:
+ 779 0000 00000000 		.space	144
+ 779      00000000 
+ 779      00000000 
+ 779      00000000 
+ 779      00000000 
+ 780              		.section	.bss.flagChg,"aw",%nobits
+ 781              		.align	2
+ 782              		.set	.LANCHOR2,. + 0
+ 785              	flagChg:
+ 786 0000 00000000 		.space	144
+ 786      00000000 
+ 786      00000000 
+ 786      00000000 
+ 786      00000000 
+ 787              		.section	.bss.flagChgEKeys,"aw",%nobits
+ 788              		.align	2
+ 789              		.set	.LANCHOR5,. + 0
+ 792              	flagChgEKeys:
+ 793 0000 000000   		.space	3
+ 794              		.section	.bss.flagEKeys,"aw",%nobits
+ 795              		.align	2
+ 796              		.set	.LANCHOR6,. + 0
+ 799              	flagEKeys:
+ 800 0000 000000   		.space	3
+ 801              		.section	.bss.keycols,"aw",%nobits
+ 802              		.set	.LANCHOR9,. + 0
+ 805              	keycols:
+ 806 0000 00       		.space	1
+ 807              		.section	.bss.ledmatrix,"aw",%nobits
+ 808              		.align	2
+ 809              		.set	.LANCHOR0,. + 0
+ 812              	ledmatrix:
+ 813 0000 00000000 		.space	160
+ 813      00000000 
+ 813      00000000 
+ 813      00000000 
+ 813      00000000 
+ 814              		.section	.bss.ledsaddr,"aw",%nobits
+ 815              		.align	2
+ 816              		.set	.LANCHOR1,. + 0
+ 819              	ledsaddr:
+ 820 0000 000000   		.space	3
+ 821              		.section	.bss.mkr,"aw",%nobits
+ 822              		.align	2
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 15
+
+
+ 825              	mkr:
+ 826 0000 00000000 		.space	4
+ 827              		.section	.bss.prevCounter,"aw",%nobits
+ 828              		.align	2
+ 831              	prevCounter:
+ 832 0000 00000000 		.space	4
+ 833              		.section	.bss.rptcnt,"aw",%nobits
+ 836              	rptcnt:
+ 837 0000 00       		.space	1
+ 838              		.section	.bss.txbuff,"aw",%nobits
+ 839              		.align	2
+ 840              		.set	.LANCHOR3,. + 0
+ 843              	txbuff:
+ 844 0000 00000000 		.space	5
+ 844      00
+ 845              		.section	.data.ekeys,"aw"
+ 846              		.align	2
+ 847              		.set	.LANCHOR7,. + 0
+ 850              	ekeys:
+ 851 0000 00080240 		.word	1073874944
+ 852 0004 0200     		.short	2
+ 853 0006 0000     		.space	2
+ 854 0008 00080240 		.word	1073874944
+ 855 000c 0400     		.short	4
+ 856 000e 0000     		.space	2
+ 857 0010 00080240 		.word	1073874944
+ 858 0014 0800     		.short	8
+ 859 0016 0000     		.space	2
+ 860              		.section	.data.ekeysleds,"aw"
+ 861              		.align	2
+ 862              		.set	.LANCHOR11,. + 0
+ 865              	ekeysleds:
+ 866 0000 00000240 		.word	1073872896
+ 867 0004 0100     		.short	1
+ 868 0006 0000     		.space	2
+ 869 0008 00000240 		.word	1073872896
+ 870 000c 0200     		.short	2
+ 871 000e 0000     		.space	2
+ 872 0010 00000240 		.word	1073872896
+ 873 0014 0400     		.short	4
+ 874 0016 0000     		.space	2
+ 875 0018 00000240 		.word	1073872896
+ 876 001c 0800     		.short	8
+ 877 001e 0000     		.space	2
+ 878              		.section	.data.keyin,"aw"
+ 879              		.align	2
+ 880              		.set	.LANCHOR8,. + 0
+ 883              	keyin:
+ 884 0000 000C0240 		.word	1073875968
+ 885 0004 0010     		.short	4096
+ 886 0006 0000     		.space	2
+ 887 0008 000C0240 		.word	1073875968
+ 888 000c 0008     		.short	2048
+ 889 000e 0000     		.space	2
+ 890 0010 000C0240 		.word	1073875968
+ 891 0014 0004     		.short	1024
+ 892 0016 0000     		.space	2
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 16
+
+
+ 893 0018 000C0240 		.word	1073875968
+ 894 001c 0002     		.short	512
+ 895 001e 0000     		.space	2
+ 896 0020 000C0240 		.word	1073875968
+ 897 0024 0001     		.short	256
+ 898 0026 0000     		.space	2
+ 899 0028 00040240 		.word	1073873920
+ 900 002c 0080     		.short	-32768
+ 901 002e 0000     		.space	2
+ 902 0030 00100240 		.word	1073876992
+ 903 0034 4000     		.short	64
+ 904 0036 0000     		.space	2
+ 905 0038 00080240 		.word	1073874944
+ 906 003c 0020     		.short	8192
+ 907 003e 0000     		.space	2
+ 908 0040 00080240 		.word	1073874944
+ 909 0044 0100     		.short	1
+ 910 0046 0000     		.space	2
+ 911              		.section	.data.keyout,"aw"
+ 912              		.align	2
+ 913              		.set	.LANCHOR12,. + 0
+ 916              	keyout:
+ 917 0000 000C0240 		.word	1073875968
+ 918 0004 0020     		.short	8192
+ 919 0006 0000     		.space	2
+ 920 0008 000C0240 		.word	1073875968
+ 921 000c 0040     		.short	16384
+ 922 000e 0000     		.space	2
+ 923 0010 000C0240 		.word	1073875968
+ 924 0014 0080     		.short	-32768
+ 925 0016 0000     		.space	2
+ 926 0018 00080240 		.word	1073874944
+ 927 001c 4000     		.short	64
+ 928 001e 0000     		.space	2
+ 929 0020 00080240 		.word	1073874944
+ 930 0024 8000     		.short	128
+ 931 0026 0000     		.space	2
+ 932 0028 00080240 		.word	1073874944
+ 933 002c 0001     		.short	256
+ 934 002e 0000     		.space	2
+ 935 0030 00080240 		.word	1073874944
+ 936 0034 0002     		.short	512
+ 937 0036 0000     		.space	2
+ 938 0038 00000240 		.word	1073872896
+ 939 003c 0001     		.short	256
+ 940 003e 0000     		.space	2
+ 941 0040 00000240 		.word	1073872896
+ 942 0044 0008     		.short	2048
+ 943 0046 0000     		.space	2
+ 944 0048 00000240 		.word	1073872896
+ 945 004c 0010     		.short	4096
+ 946 004e 0000     		.space	2
+ 947 0050 00000240 		.word	1073872896
+ 948 0054 0080     		.short	-32768
+ 949 0056 0000     		.space	2
+ 950 0058 00080240 		.word	1073874944
+ 951 005c 0004     		.short	1024
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 17
+
+
+ 952 005e 0000     		.space	2
+ 953 0060 00080240 		.word	1073874944
+ 954 0064 0008     		.short	2048
+ 955 0066 0000     		.space	2
+ 956 0068 00080240 		.word	1073874944
+ 957 006c 0010     		.short	4096
+ 958 006e 0000     		.space	2
+ 959 0070 000C0240 		.word	1073875968
+ 960 0074 0100     		.short	1
+ 961 0076 0000     		.space	2
+ 962 0078 000C0240 		.word	1073875968
+ 963 007c 0200     		.short	2
+ 964 007e 0000     		.space	2
+ 965              		.section	.data.leds,"aw"
+ 966              		.align	2
+ 967              		.set	.LANCHOR10,. + 0
+ 970              	leds:
+ 971 0000 000C0240 		.word	1073875968
+ 972 0004 0400     		.short	4
+ 973 0006 0000     		.space	2
+ 974 0008 000C0240 		.word	1073875968
+ 975 000c 0800     		.short	8
+ 976 000e 0000     		.space	2
+ 977 0010 000C0240 		.word	1073875968
+ 978 0014 1000     		.short	16
+ 979 0016 0000     		.space	2
+ 980 0018 000C0240 		.word	1073875968
+ 981 001c 2000     		.short	32
+ 982 001e 0000     		.space	2
+ 983 0020 000C0240 		.word	1073875968
+ 984 0024 4000     		.short	64
+ 985 0026 0000     		.space	2
+ 986 0028 000C0240 		.word	1073875968
+ 987 002c 8000     		.short	128
+ 988 002e 0000     		.space	2
+ 989 0030 00040240 		.word	1073873920
+ 990 0034 0800     		.short	8
+ 991 0036 0000     		.space	2
+ 992 0038 00040240 		.word	1073873920
+ 993 003c 2000     		.short	32
+ 994 003e 0000     		.space	2
+ 995 0040 00040240 		.word	1073873920
+ 996 0044 4000     		.short	64
+ 997 0046 0000     		.space	2
+ 998 0048 00040240 		.word	1073873920
+ 999 004c 8000     		.short	128
+ 1000 004e 0000     		.space	2
+ 1001              		.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+/tmp/.private/user/ccnI4Dbx.s:18     .text.usDelay:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:24     .text.usDelay:0000000000000000 usDelay
+/tmp/.private/user/ccnI4Dbx.s:40     .text.usDelay:0000000000000010 $d
+/tmp/.private/user/ccnI4Dbx.s:43     .text.ledView:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:49     .text.ledView:0000000000000000 ledView
+/tmp/.private/user/ccnI4Dbx.s:61     .text.ledView:0000000000000010 $d
+/tmp/.private/user/ccnI4Dbx.s:64     .text.ledsAll:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:70     .text.ledsAll:0000000000000000 ledsAll
+/tmp/.private/user/ccnI4Dbx.s:98     .text.ledsAll:0000000000000030 $d
+/tmp/.private/user/ccnI4Dbx.s:101    .text.receiveData:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:107    .text.receiveData:0000000000000000 receiveData
+/tmp/.private/user/ccnI4Dbx.s:155    .text.receiveData:0000000000000054 $d
+/tmp/.private/user/ccnI4Dbx.s:159    .text.sendKeyboardData:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:165    .text.sendKeyboardData:0000000000000000 sendKeyboardData
+/tmp/.private/user/ccnI4Dbx.s:269    .text.sendKeyboardData:00000000000000b0 $d
+/tmp/.private/user/ccnI4Dbx.s:277    .text.scanKeyboard:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:283    .text.scanKeyboard:0000000000000000 scanKeyboard
+/tmp/.private/user/ccnI4Dbx.s:421    .text.scanKeyboard:000000000000012c $d
+/tmp/.private/user/ccnI4Dbx.s:430    .text.ledsView:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:436    .text.ledsView:0000000000000000 ledsView
+/tmp/.private/user/ccnI4Dbx.s:495    .text.ledsView:000000000000007c $d
+/tmp/.private/user/ccnI4Dbx.s:501    .text.Error_Handler:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:507    .text.Error_Handler:0000000000000000 Error_Handler
+/tmp/.private/user/ccnI4Dbx.s:522    .text.SystemClock_Config:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:528    .text.SystemClock_Config:0000000000000000 SystemClock_Config
+/tmp/.private/user/ccnI4Dbx.s:603    .text.SystemClock_Config:000000000000009c $d
+/tmp/.private/user/ccnI4Dbx.s:607    .text.main:0000000000000000 $t
+/tmp/.private/user/ccnI4Dbx.s:613    .text.main:0000000000000000 main
+/tmp/.private/user/ccnI4Dbx.s:742    .text.main:000000000000011c $d
+/tmp/.private/user/ccnI4Dbx.s:771    .bss.Enc_Counter:0000000000000000 Enc_Counter
+/tmp/.private/user/ccnI4Dbx.s:831    .bss.prevCounter:0000000000000000 prevCounter
+/tmp/.private/user/ccnI4Dbx.s:843    .bss.txbuff:0000000000000000 txbuff
+/tmp/.private/user/ccnI4Dbx.s:825    .bss.mkr:0000000000000000 mkr
+/tmp/.private/user/ccnI4Dbx.s:836    .bss.rptcnt:0000000000000000 rptcnt
+/tmp/.private/user/ccnI4Dbx.s:792    .bss.flagChgEKeys:0000000000000000 flagChgEKeys
+/tmp/.private/user/ccnI4Dbx.s:799    .bss.flagEKeys:0000000000000000 flagEKeys
+/tmp/.private/user/ccnI4Dbx.s:785    .bss.flagChg:0000000000000000 flagChg
+/tmp/.private/user/ccnI4Dbx.s:778    .bss.flag:0000000000000000 flag
+/tmp/.private/user/ccnI4Dbx.s:812    .bss.ledmatrix:0000000000000000 ledmatrix
+/tmp/.private/user/ccnI4Dbx.s:819    .bss.ledsaddr:0000000000000000 ledsaddr
+/tmp/.private/user/ccnI4Dbx.s:805    .bss.keycols:0000000000000000 keycols
+/tmp/.private/user/ccnI4Dbx.s:883    .data.keyin:0000000000000000 keyin
+/tmp/.private/user/ccnI4Dbx.s:970    .data.leds:0000000000000000 leds
+/tmp/.private/user/ccnI4Dbx.s:916    .data.keyout:0000000000000000 keyout
+/tmp/.private/user/ccnI4Dbx.s:865    .data.ekeysleds:0000000000000000 ekeysleds
+/tmp/.private/user/ccnI4Dbx.s:850    .data.ekeys:0000000000000000 ekeys
+/tmp/.private/user/ccnI4Dbx.s:772    .bss.Enc_Counter:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:774    .bss.flag:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:781    .bss.flagChg:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:788    .bss.flagChgEKeys:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:795    .bss.flagEKeys:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:806    .bss.keycols:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:808    .bss.ledmatrix:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:815    .bss.ledsaddr:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:822    .bss.mkr:0000000000000000 $d
+ARM GAS  /tmp/.private/user/ccnI4Dbx.s 			page 19
+
+
+/tmp/.private/user/ccnI4Dbx.s:828    .bss.prevCounter:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:837    .bss.rptcnt:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:839    .bss.txbuff:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:846    .data.ekeys:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:861    .data.ekeysleds:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:879    .data.keyin:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:912    .data.keyout:0000000000000000 $d
+/tmp/.private/user/ccnI4Dbx.s:966    .data.leds:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+htim10
+HAL_UART_Receive_IT
+huart1
+HAL_UART_Transmit_IT
+HAL_GPIO_ReadPin
+HAL_GPIO_WritePin
+memset
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_Init
+MX_GPIO_Init
+MX_USART1_UART_Init
+MX_TIM10_Init
+MX_TIM1_Init
+HAL_TIM_Base_Start
+HAL_TIM_Encoder_Start
+htim1

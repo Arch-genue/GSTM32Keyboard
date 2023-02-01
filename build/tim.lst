@@ -1,0 +1,332 @@
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"tim.c"
+  16              		.text
+  17              		.section	.text.MX_TIM1_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_TIM1_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	MX_TIM1_Init:
+  25              		@ args = 0, pretend = 0, frame = 48
+  26              		@ frame_needed = 0, uses_anonymous_args = 0
+  27 0000 00B5     		push	{lr}
+  28 0002 8DB0     		sub	sp, sp, #52
+  29 0004 2422     		movs	r2, #36
+  30 0006 0021     		movs	r1, #0
+  31 0008 03A8     		add	r0, sp, #12
+  32 000a FFF7FEFF 		bl	memset
+  33 000e 0023     		movs	r3, #0
+  34 0010 0193     		str	r3, [sp, #4]
+  35 0012 0293     		str	r3, [sp, #8]
+  36 0014 1148     		ldr	r0, .L7
+  37 0016 124A     		ldr	r2, .L7+4
+  38 0018 0260     		str	r2, [r0]
+  39 001a 4360     		str	r3, [r0, #4]
+  40 001c 8360     		str	r3, [r0, #8]
+  41 001e 4FF6FF72 		movw	r2, #65535
+  42 0022 C260     		str	r2, [r0, #12]
+  43 0024 0361     		str	r3, [r0, #16]
+  44 0026 4361     		str	r3, [r0, #20]
+  45 0028 8361     		str	r3, [r0, #24]
+  46 002a 0123     		movs	r3, #1
+  47 002c 0393     		str	r3, [sp, #12]
+  48 002e 0593     		str	r3, [sp, #20]
+  49 0030 0993     		str	r3, [sp, #36]
+  50 0032 03A9     		add	r1, sp, #12
+  51 0034 FFF7FEFF 		bl	HAL_TIM_Encoder_Init
+  52 0038 50B9     		cbnz	r0, .L5
+  53              	.L2:
+  54 003a 0023     		movs	r3, #0
+  55 003c 0193     		str	r3, [sp, #4]
+  56 003e 0293     		str	r3, [sp, #8]
+  57 0040 01A9     		add	r1, sp, #4
+  58 0042 0648     		ldr	r0, .L7
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 2
+
+
+  59 0044 FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+  60 0048 28B9     		cbnz	r0, .L6
+  61              	.L1:
+  62 004a 0DB0     		add	sp, sp, #52
+  63              		@ sp needed
+  64 004c 5DF804FB 		ldr	pc, [sp], #4
+  65              	.L5:
+  66 0050 FFF7FEFF 		bl	Error_Handler
+  67 0054 F1E7     		b	.L2
+  68              	.L6:
+  69 0056 FFF7FEFF 		bl	Error_Handler
+  70 005a F6E7     		b	.L1
+  71              	.L8:
+  72              		.align	2
+  73              	.L7:
+  74 005c 00000000 		.word	.LANCHOR0
+  75 0060 00000140 		.word	1073807360
+  77              		.section	.text.MX_TIM10_Init,"ax",%progbits
+  78              		.align	1
+  79              		.global	MX_TIM10_Init
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  84              	MX_TIM10_Init:
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  87 0000 08B5     		push	{r3, lr}
+  88 0002 0948     		ldr	r0, .L13
+  89 0004 094B     		ldr	r3, .L13+4
+  90 0006 0360     		str	r3, [r0]
+  91 0008 A723     		movs	r3, #167
+  92 000a 4360     		str	r3, [r0, #4]
+  93 000c 0023     		movs	r3, #0
+  94 000e 8360     		str	r3, [r0, #8]
+  95 0010 4FF6FF72 		movw	r2, #65535
+  96 0014 C260     		str	r2, [r0, #12]
+  97 0016 0361     		str	r3, [r0, #16]
+  98 0018 8361     		str	r3, [r0, #24]
+  99 001a FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 100 001e 00B9     		cbnz	r0, .L12
+ 101              	.L9:
+ 102 0020 08BD     		pop	{r3, pc}
+ 103              	.L12:
+ 104 0022 FFF7FEFF 		bl	Error_Handler
+ 105 0026 FBE7     		b	.L9
+ 106              	.L14:
+ 107              		.align	2
+ 108              	.L13:
+ 109 0028 00000000 		.word	.LANCHOR1
+ 110 002c 00440140 		.word	1073824768
+ 112              		.section	.text.HAL_TIM_Encoder_MspInit,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	HAL_TIM_Encoder_MspInit
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	HAL_TIM_Encoder_MspInit:
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 3
+
+
+ 120              		@ args = 0, pretend = 0, frame = 32
+ 121              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122 0000 00B5     		push	{lr}
+ 123 0002 89B0     		sub	sp, sp, #36
+ 124 0004 0023     		movs	r3, #0
+ 125 0006 0393     		str	r3, [sp, #12]
+ 126 0008 0493     		str	r3, [sp, #16]
+ 127 000a 0593     		str	r3, [sp, #20]
+ 128 000c 0693     		str	r3, [sp, #24]
+ 129 000e 0793     		str	r3, [sp, #28]
+ 130 0010 0268     		ldr	r2, [r0]
+ 131 0012 154B     		ldr	r3, .L19
+ 132 0014 9A42     		cmp	r2, r3
+ 133 0016 02D0     		beq	.L18
+ 134              	.L15:
+ 135 0018 09B0     		add	sp, sp, #36
+ 136              		@ sp needed
+ 137 001a 5DF804FB 		ldr	pc, [sp], #4
+ 138              	.L18:
+ 139 001e 0021     		movs	r1, #0
+ 140 0020 0191     		str	r1, [sp, #4]
+ 141 0022 03F59C33 		add	r3, r3, #79872
+ 142 0026 5A6C     		ldr	r2, [r3, #68]
+ 143 0028 42F00102 		orr	r2, r2, #1
+ 144 002c 5A64     		str	r2, [r3, #68]
+ 145 002e 5A6C     		ldr	r2, [r3, #68]
+ 146 0030 02F00102 		and	r2, r2, #1
+ 147 0034 0192     		str	r2, [sp, #4]
+ 148 0036 019A     		ldr	r2, [sp, #4]
+ 149 0038 0291     		str	r1, [sp, #8]
+ 150 003a 1A6B     		ldr	r2, [r3, #48]
+ 151 003c 42F01002 		orr	r2, r2, #16
+ 152 0040 1A63     		str	r2, [r3, #48]
+ 153 0042 1B6B     		ldr	r3, [r3, #48]
+ 154 0044 03F01003 		and	r3, r3, #16
+ 155 0048 0293     		str	r3, [sp, #8]
+ 156 004a 029B     		ldr	r3, [sp, #8]
+ 157 004c 4FF42063 		mov	r3, #2560
+ 158 0050 0393     		str	r3, [sp, #12]
+ 159 0052 0223     		movs	r3, #2
+ 160 0054 0493     		str	r3, [sp, #16]
+ 161 0056 0123     		movs	r3, #1
+ 162 0058 0593     		str	r3, [sp, #20]
+ 163 005a 0793     		str	r3, [sp, #28]
+ 164 005c 03A9     		add	r1, sp, #12
+ 165 005e 0348     		ldr	r0, .L19+4
+ 166 0060 FFF7FEFF 		bl	HAL_GPIO_Init
+ 167 0064 D8E7     		b	.L15
+ 168              	.L20:
+ 169 0066 00BF     		.align	2
+ 170              	.L19:
+ 171 0068 00000140 		.word	1073807360
+ 172 006c 00100240 		.word	1073876992
+ 174              		.section	.text.HAL_TIM_Base_MspInit,"ax",%progbits
+ 175              		.align	1
+ 176              		.global	HAL_TIM_Base_MspInit
+ 177              		.syntax unified
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 4
+
+
+ 178              		.thumb
+ 179              		.thumb_func
+ 181              	HAL_TIM_Base_MspInit:
+ 182              		@ args = 0, pretend = 0, frame = 8
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              		@ link register save eliminated.
+ 185 0000 0268     		ldr	r2, [r0]
+ 186 0002 094B     		ldr	r3, .L28
+ 187 0004 9A42     		cmp	r2, r3
+ 188 0006 00D0     		beq	.L27
+ 189 0008 7047     		bx	lr
+ 190              	.L27:
+ 191 000a 82B0     		sub	sp, sp, #8
+ 192 000c 0023     		movs	r3, #0
+ 193 000e 0193     		str	r3, [sp, #4]
+ 194 0010 064B     		ldr	r3, .L28+4
+ 195 0012 5A6C     		ldr	r2, [r3, #68]
+ 196 0014 42F40032 		orr	r2, r2, #131072
+ 197 0018 5A64     		str	r2, [r3, #68]
+ 198 001a 5B6C     		ldr	r3, [r3, #68]
+ 199 001c 03F40033 		and	r3, r3, #131072
+ 200 0020 0193     		str	r3, [sp, #4]
+ 201 0022 019B     		ldr	r3, [sp, #4]
+ 202 0024 02B0     		add	sp, sp, #8
+ 203              		@ sp needed
+ 204 0026 7047     		bx	lr
+ 205              	.L29:
+ 206              		.align	2
+ 207              	.L28:
+ 208 0028 00440140 		.word	1073824768
+ 209 002c 00380240 		.word	1073887232
+ 211              		.section	.text.HAL_TIM_Encoder_MspDeInit,"ax",%progbits
+ 212              		.align	1
+ 213              		.global	HAL_TIM_Encoder_MspDeInit
+ 214              		.syntax unified
+ 215              		.thumb
+ 216              		.thumb_func
+ 218              	HAL_TIM_Encoder_MspDeInit:
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 221 0000 08B5     		push	{r3, lr}
+ 222 0002 0268     		ldr	r2, [r0]
+ 223 0004 074B     		ldr	r3, .L34
+ 224 0006 9A42     		cmp	r2, r3
+ 225 0008 00D0     		beq	.L33
+ 226              	.L30:
+ 227 000a 08BD     		pop	{r3, pc}
+ 228              	.L33:
+ 229 000c 064A     		ldr	r2, .L34+4
+ 230 000e 536C     		ldr	r3, [r2, #68]
+ 231 0010 23F00103 		bic	r3, r3, #1
+ 232 0014 5364     		str	r3, [r2, #68]
+ 233 0016 4FF42061 		mov	r1, #2560
+ 234 001a 0448     		ldr	r0, .L34+8
+ 235 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 236 0020 F3E7     		b	.L30
+ 237              	.L35:
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 5
+
+
+ 238 0022 00BF     		.align	2
+ 239              	.L34:
+ 240 0024 00000140 		.word	1073807360
+ 241 0028 00380240 		.word	1073887232
+ 242 002c 00100240 		.word	1073876992
+ 244              		.section	.text.HAL_TIM_Base_MspDeInit,"ax",%progbits
+ 245              		.align	1
+ 246              		.global	HAL_TIM_Base_MspDeInit
+ 247              		.syntax unified
+ 248              		.thumb
+ 249              		.thumb_func
+ 251              	HAL_TIM_Base_MspDeInit:
+ 252              		@ args = 0, pretend = 0, frame = 0
+ 253              		@ frame_needed = 0, uses_anonymous_args = 0
+ 254              		@ link register save eliminated.
+ 255 0000 0268     		ldr	r2, [r0]
+ 256 0002 054B     		ldr	r3, .L39
+ 257 0004 9A42     		cmp	r2, r3
+ 258 0006 00D0     		beq	.L38
+ 259              	.L36:
+ 260 0008 7047     		bx	lr
+ 261              	.L38:
+ 262 000a 044A     		ldr	r2, .L39+4
+ 263 000c 536C     		ldr	r3, [r2, #68]
+ 264 000e 23F40033 		bic	r3, r3, #131072
+ 265 0012 5364     		str	r3, [r2, #68]
+ 266 0014 F8E7     		b	.L36
+ 267              	.L40:
+ 268 0016 00BF     		.align	2
+ 269              	.L39:
+ 270 0018 00440140 		.word	1073824768
+ 271 001c 00380240 		.word	1073887232
+ 273              		.global	htim10
+ 274              		.global	htim1
+ 275              		.section	.bss.htim1,"aw",%nobits
+ 276              		.align	2
+ 277              		.set	.LANCHOR0,. + 0
+ 280              	htim1:
+ 281 0000 00000000 		.space	72
+ 281      00000000 
+ 281      00000000 
+ 281      00000000 
+ 281      00000000 
+ 282              		.section	.bss.htim10,"aw",%nobits
+ 283              		.align	2
+ 284              		.set	.LANCHOR1,. + 0
+ 287              	htim10:
+ 288 0000 00000000 		.space	72
+ 288      00000000 
+ 288      00000000 
+ 288      00000000 
+ 288      00000000 
+ 289              		.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"
+ARM GAS  /tmp/.private/user/ccZPeDwL.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tim.c
+/tmp/.private/user/ccZPeDwL.s:18     .text.MX_TIM1_Init:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:24     .text.MX_TIM1_Init:0000000000000000 MX_TIM1_Init
+/tmp/.private/user/ccZPeDwL.s:74     .text.MX_TIM1_Init:000000000000005c $d
+/tmp/.private/user/ccZPeDwL.s:78     .text.MX_TIM10_Init:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:84     .text.MX_TIM10_Init:0000000000000000 MX_TIM10_Init
+/tmp/.private/user/ccZPeDwL.s:109    .text.MX_TIM10_Init:0000000000000028 $d
+/tmp/.private/user/ccZPeDwL.s:113    .text.HAL_TIM_Encoder_MspInit:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:119    .text.HAL_TIM_Encoder_MspInit:0000000000000000 HAL_TIM_Encoder_MspInit
+/tmp/.private/user/ccZPeDwL.s:171    .text.HAL_TIM_Encoder_MspInit:0000000000000068 $d
+/tmp/.private/user/ccZPeDwL.s:175    .text.HAL_TIM_Base_MspInit:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:181    .text.HAL_TIM_Base_MspInit:0000000000000000 HAL_TIM_Base_MspInit
+/tmp/.private/user/ccZPeDwL.s:208    .text.HAL_TIM_Base_MspInit:0000000000000028 $d
+/tmp/.private/user/ccZPeDwL.s:212    .text.HAL_TIM_Encoder_MspDeInit:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:218    .text.HAL_TIM_Encoder_MspDeInit:0000000000000000 HAL_TIM_Encoder_MspDeInit
+/tmp/.private/user/ccZPeDwL.s:240    .text.HAL_TIM_Encoder_MspDeInit:0000000000000024 $d
+/tmp/.private/user/ccZPeDwL.s:245    .text.HAL_TIM_Base_MspDeInit:0000000000000000 $t
+/tmp/.private/user/ccZPeDwL.s:251    .text.HAL_TIM_Base_MspDeInit:0000000000000000 HAL_TIM_Base_MspDeInit
+/tmp/.private/user/ccZPeDwL.s:270    .text.HAL_TIM_Base_MspDeInit:0000000000000018 $d
+/tmp/.private/user/ccZPeDwL.s:287    .bss.htim10:0000000000000000 htim10
+/tmp/.private/user/ccZPeDwL.s:280    .bss.htim1:0000000000000000 htim1
+/tmp/.private/user/ccZPeDwL.s:276    .bss.htim1:0000000000000000 $d
+/tmp/.private/user/ccZPeDwL.s:283    .bss.htim10:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_TIM_Encoder_Init
+HAL_TIMEx_MasterConfigSynchronization
+Error_Handler
+HAL_TIM_Base_Init
+HAL_GPIO_Init
+HAL_GPIO_DeInit
