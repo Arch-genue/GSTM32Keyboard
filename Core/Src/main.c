@@ -109,6 +109,7 @@ pint keyin[KEYINS] = {
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim10;
 
 UART_HandleTypeDef huart1;
@@ -135,12 +136,22 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM10_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int prevCounter = 0;
+void usDelay(uint16_t useconds)
+{
+  __HAL_TIM_SET_COUNTER(&htim10, 0);
+  while(__HAL_TIM_GET_COUNTER(&htim10) < useconds);
+}
+
+uint8_t Enc_Counter = 0;
+
 /*--LED FUNCTIONS--*/
 void ledView(uint8_t key, uint8_t led, uint8_t status)
 {
@@ -154,12 +165,12 @@ void ledsAll(uint8_t st)
 
 void ledsView()
 {
-    for (int key = 0; key < KEYOUTS; key++)
-    {
-        for (int led = 0; led < LEDS; led++) { if (keycols == key) HAL_GPIO_WritePin(leds[led].port, leds[led].pin, ledmatrix[key][led]); }
-    }
+    for (int led = 0; led < LEDS; led++) { HAL_GPIO_WritePin(leds[led].port, leds[led].pin, ledmatrix[keycols][led]); }
     
     for (int l = 0; l < 4; l++ ) { HAL_GPIO_WritePin(ekeysleds[l].port, ekeysleds[l].pin, ledmatrix[7][l]); }
+    usDelay(800);
+    for (int led = 0; led < LEDS; led++) { HAL_GPIO_WritePin(leds[led].port, leds[led].pin, 1); }
+    usDelay(200);
 }
 
 /*--UART FUNCTIONS--*/
@@ -176,6 +187,19 @@ void receiveData()
 
 void sendKeyboardData()
 {
+    int currCounter = __HAL_TIM_GET_COUNTER(&htim1);
+    
+    currCounter = 32767 - ((currCounter-1) & 0xFFFF) / 2;
+    if(currCounter != prevCounter) {
+        char buff[16];
+        snprintf(buff, sizeof(buff), "%06d", currCounter);
+
+        txbuff[0] = currCounter;
+        HAL_UART_Transmit_IT(&huart1, &txbuff, 2);
+
+        prevCounter = currCounter;
+    }
+    
     for (uint8_t x = 0; x < KEYOUTS; x++)
     {
         for (uint8_t y = 0; y < KEYINS; y++)
@@ -209,6 +233,7 @@ void sendKeyboardData()
 /*--INPUT FUNCTIONS--*/
 void scanKeyboard()
 {
+    usDelay(50);
     // Special buttons
     for (int u = 0; u < 3; u++)
     {
@@ -226,7 +251,7 @@ void scanKeyboard()
     {
         if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_RESET && flag[keycols][b] == 0)
         {
-            usDelay(200);
+            usDelay(300);
             if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_RESET)
             {
                 flag[keycols][b] = 1;
@@ -235,7 +260,7 @@ void scanKeyboard()
         }
         else if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_SET && flag[keycols][b] == 1)
         {
-            usDelay(200);
+            usDelay(300);
             if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_SET)
             {
                 flag[keycols][b] = 0;
@@ -243,7 +268,7 @@ void scanKeyboard()
             }
         }
     }
-    //usDelay(50);
+    usDelay(100);
 }
 
 #ifdef USE_ENCODER
@@ -263,12 +288,6 @@ void scanEncoder()
     }
 }
 #endif
-
-void usDelay(uint16_t useconds)
-{
-  __HAL_TIM_SET_COUNTER(&htim10, 0);
-  while(__HAL_TIM_GET_COUNTER(&htim10) < useconds);
-}
 
 /* USER CODE END 0 */
 
@@ -302,8 +321,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_TIM10_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim10);
+  HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
 
   /* USER CODE END 2 */
 
@@ -344,55 +365,16 @@ int main(void)
         // ENABLE KEYBOARD
         HAL_GPIO_WritePin(keyout[keycols].port, keyout[keycols].pin, 0);
         
-        if (mode) {
-            usDelay(50);
-            // Special buttons
-            for (int u = 0; u < 3; u++)
-            {
-                if (HAL_GPIO_ReadPin(ekeys[u].port, ekeys[u].pin) == GPIO_PIN_RESET && flagEKeys[u] == 0)
-                {
-                    flagEKeys[u] = 1;
-                    flagChgEKeys[u] = 1;
-                } else if(HAL_GPIO_ReadPin(ekeys[u].port, ekeys[u].pin) == GPIO_PIN_SET && flagEKeys[u] == 1) { 
-                    flagEKeys[u] = 0; 
-                    flagChgEKeys[u] = 1; 
-                }
-            }
-            // Main keyboard
-            for (int b = 0; b < KEYINS; b++)
-            {
-                if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_RESET && flag[keycols][b] == 0)
-                {
-                    usDelay(300);
-                    if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_RESET)
-                    {
-                        flag[keycols][b] = 1;
-                        flagChg[keycols][b] = 1;
-                        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 0);
-                    }
-                }
-                else if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_SET && flag[keycols][b] == 1)
-                {
-                    usDelay(300);
-                    if (HAL_GPIO_ReadPin(keyin[b].port, keyin[b].pin) == GPIO_PIN_SET)
-                    {
-                        flag[keycols][b] = 0;
-                        flagChg[keycols][b] = 1;
-                        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1);
-                    }
-                }
-            }
-            usDelay(100);
-            //scanKeyboard();
-        } else {
-            ledsView();
-            usDelay(700);
-        }
+        if (mode) scanKeyboard();
+        else ledsView();
  
         //DISABLE KEYBOARD
         HAL_GPIO_WritePin(keyout[keycols].port, keyout[keycols].pin, 1);
         if(!mode) usDelay(500);
-
+        
+        //HAL_Delay(200);
+        //txbuff[0] = keycols;
+        //HAL_UART_Transmit_IT(&huart1, &txbuff, 1);
         keycols++;
     }
   /* USER CODE END 3 */
@@ -442,6 +424,56 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_Encoder_InitTypeDef sConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 167;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 30;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC1Filter = 6;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC2Filter = 6;
+  if (HAL_TIM_Encoder_Init(&htim1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
 }
 
 /**
