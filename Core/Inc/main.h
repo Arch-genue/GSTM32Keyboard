@@ -45,11 +45,27 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define KEYOUTS 16
+#define KEYINS 9
+#define LEDS 10
+#define LEDS_KEYOUTS 8
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+
+//* BIT
+#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit) ((value) |= (1UL << (bit)))
+#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
+
+#define usDelay(usec) __HAL_TIM_SET_COUNTER(&htim10, 0); while (__HAL_TIM_GET_COUNTER(&htim10) < usec);
+
+//* PIN
+#define readPin(port, pin) HAL_GPIO_ReadPin(port, pin)
+#define writePin(port, pin, state) HAL_GPIO_WritePin(port, pin, state)
+#define togglePin(port, pin) HAL_GPIO_TogglePin(port, pin)
 
 /* USER CODE END EM */
 
@@ -63,6 +79,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 
 /* USER CODE BEGIN Private defines */
+//#define USE_ENCODER
+
 
 /* USER CODE END Private defines */
 
