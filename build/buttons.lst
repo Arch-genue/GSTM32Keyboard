@@ -1,0 +1,625 @@
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"buttons.c"
+  16              		.text
+  17              		.section	.text.getKeyCounter,"ax",%progbits
+  18              		.align	1
+  19              		.global	getKeyCounter
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	getKeyCounter:
+  25              		@ args = 0, pretend = 0, frame = 0
+  26              		@ frame_needed = 0, uses_anonymous_args = 0
+  27              		@ link register save eliminated.
+  28 0000 014B     		ldr	r3, .L2
+  29 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+  30 0004 7047     		bx	lr
+  31              	.L3:
+  32 0006 00BF     		.align	2
+  33              	.L2:
+  34 0008 00000000 		.word	.LANCHOR0
+  36              		.section	.text.setKeyCounter,"ax",%progbits
+  37              		.align	1
+  38              		.global	setKeyCounter
+  39              		.syntax unified
+  40              		.thumb
+  41              		.thumb_func
+  43              	setKeyCounter:
+  44              		@ args = 0, pretend = 0, frame = 0
+  45              		@ frame_needed = 0, uses_anonymous_args = 0
+  46              		@ link register save eliminated.
+  47 0000 014B     		ldr	r3, .L5
+  48 0002 1870     		strb	r0, [r3]
+  49 0004 7047     		bx	lr
+  50              	.L6:
+  51 0006 00BF     		.align	2
+  52              	.L5:
+  53 0008 00000000 		.word	.LANCHOR0
+  55              		.section	.text.getEKeysMatrix,"ax",%progbits
+  56              		.align	1
+  57              		.global	getEKeysMatrix
+  58              		.syntax unified
+  59              		.thumb
+  60              		.thumb_func
+  62              	getEKeysMatrix:
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 2
+
+
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65              		@ link register save eliminated.
+  66 0000 034B     		ldr	r3, .L8
+  67 0002 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+  68 0006 0841     		asrs	r0, r0, r1
+  69 0008 00F00100 		and	r0, r0, #1
+  70 000c 7047     		bx	lr
+  71              	.L9:
+  72 000e 00BF     		.align	2
+  73              	.L8:
+  74 0010 00000000 		.word	.LANCHOR1
+  76              		.section	.text.getKeysMatrix,"ax",%progbits
+  77              		.align	1
+  78              		.global	getKeysMatrix
+  79              		.syntax unified
+  80              		.thumb
+  81              		.thumb_func
+  83              	getKeysMatrix:
+  84              		@ args = 0, pretend = 0, frame = 0
+  85              		@ frame_needed = 0, uses_anonymous_args = 0
+  86              		@ link register save eliminated.
+  87 0000 01EB4001 		add	r1, r1, r0, lsl #1
+  88 0004 034B     		ldr	r3, .L11
+  89 0006 33F81100 		ldrh	r0, [r3, r1, lsl #1]
+  90 000a 1041     		asrs	r0, r0, r2
+  91 000c 00F00100 		and	r0, r0, #1
+  92 0010 7047     		bx	lr
+  93              	.L12:
+  94 0012 00BF     		.align	2
+  95              	.L11:
+  96 0014 00000000 		.word	.LANCHOR2
+  98              		.section	.text.setKeysMatrix,"ax",%progbits
+  99              		.align	1
+ 100              		.global	setKeysMatrix
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 105              	setKeysMatrix:
+ 106              		@ args = 0, pretend = 0, frame = 0
+ 107              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108              		@ link register save eliminated.
+ 109 0000 5BB1     		cbz	r3, .L14
+ 110 0002 0123     		movs	r3, #1
+ 111 0004 03FA02F2 		lsl	r2, r3, r2
+ 112 0008 0B4B     		ldr	r3, .L19
+ 113 000a 01EB4001 		add	r1, r1, r0, lsl #1
+ 114 000e 33F81100 		ldrh	r0, [r3, r1, lsl #1]
+ 115 0012 0243     		orrs	r2, r2, r0
+ 116 0014 23F81120 		strh	r2, [r3, r1, lsl #1]	@ movhi
+ 117 0018 7047     		bx	lr
+ 118              	.L14:
+ 119 001a 10B4     		push	{r4}
+ 120 001c 0123     		movs	r3, #1
+ 121 001e 9340     		lsls	r3, r3, r2
+ 122 0020 054C     		ldr	r4, .L19
+ 123 0022 01EB4001 		add	r1, r1, r0, lsl #1
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 3
+
+
+ 124 0026 34F81120 		ldrh	r2, [r4, r1, lsl #1]
+ 125 002a 22EA0302 		bic	r2, r2, r3
+ 126 002e 24F81120 		strh	r2, [r4, r1, lsl #1]	@ movhi
+ 127 0032 5DF8044B 		ldr	r4, [sp], #4
+ 128 0036 7047     		bx	lr
+ 129              	.L20:
+ 130              		.align	2
+ 131              	.L19:
+ 132 0038 00000000 		.word	.LANCHOR2
+ 134              		.section	.text.setEKeysMatrix,"ax",%progbits
+ 135              		.align	1
+ 136              		.global	setEKeysMatrix
+ 137              		.syntax unified
+ 138              		.thumb
+ 139              		.thumb_func
+ 141              	setEKeysMatrix:
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              		@ link register save eliminated.
+ 145 0000 4AB1     		cbz	r2, .L22
+ 146 0002 0123     		movs	r3, #1
+ 147 0004 03FA01F1 		lsl	r1, r3, r1
+ 148 0008 084B     		ldr	r3, .L24
+ 149 000a 33F81020 		ldrh	r2, [r3, r0, lsl #1]
+ 150 000e 1143     		orrs	r1, r1, r2
+ 151 0010 23F81010 		strh	r1, [r3, r0, lsl #1]	@ movhi
+ 152 0014 7047     		bx	lr
+ 153              	.L22:
+ 154 0016 0123     		movs	r3, #1
+ 155 0018 8B40     		lsls	r3, r3, r1
+ 156 001a 044A     		ldr	r2, .L24
+ 157 001c 32F81010 		ldrh	r1, [r2, r0, lsl #1]
+ 158 0020 21EA0301 		bic	r1, r1, r3
+ 159 0024 22F81010 		strh	r1, [r2, r0, lsl #1]	@ movhi
+ 160 0028 7047     		bx	lr
+ 161              	.L25:
+ 162 002a 00BF     		.align	2
+ 163              	.L24:
+ 164 002c 00000000 		.word	.LANCHOR1
+ 166              		.section	.text.keyboardStart,"ax",%progbits
+ 167              		.align	1
+ 168              		.global	keyboardStart
+ 169              		.syntax unified
+ 170              		.thumb
+ 171              		.thumb_func
+ 173              	keyboardStart:
+ 174              		@ args = 0, pretend = 0, frame = 0
+ 175              		@ frame_needed = 0, uses_anonymous_args = 0
+ 176 0000 10B5     		push	{r4, lr}
+ 177 0002 0024     		movs	r4, #0
+ 178 0004 09E0     		b	.L27
+ 179              	.L28:
+ 180 0006 064B     		ldr	r3, .L30
+ 181 0008 03EBC401 		add	r1, r3, r4, lsl #3
+ 182 000c 0122     		movs	r2, #1
+ 183 000e 8988     		ldrh	r1, [r1, #4]
+ 184 0010 53F83400 		ldr	r0, [r3, r4, lsl #3]
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 4
+
+
+ 185 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 186 0018 0134     		adds	r4, r4, #1
+ 187              	.L27:
+ 188 001a 0F2C     		cmp	r4, #15
+ 189 001c F3DD     		ble	.L28
+ 190 001e 10BD     		pop	{r4, pc}
+ 191              	.L31:
+ 192              		.align	2
+ 193              	.L30:
+ 194 0020 00000000 		.word	.LANCHOR3
+ 196              		.section	.text.keyboardEnable,"ax",%progbits
+ 197              		.align	1
+ 198              		.global	keyboardEnable
+ 199              		.syntax unified
+ 200              		.thumb
+ 201              		.thumb_func
+ 203              	keyboardEnable:
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206 0000 08B5     		push	{r3, lr}
+ 207 0002 064B     		ldr	r3, .L34
+ 208 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 209 0006 064B     		ldr	r3, .L34+4
+ 210 0008 03EBC001 		add	r1, r3, r0, lsl #3
+ 211 000c 0022     		movs	r2, #0
+ 212 000e 8988     		ldrh	r1, [r1, #4]
+ 213 0010 53F83000 		ldr	r0, [r3, r0, lsl #3]
+ 214 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 215 0018 08BD     		pop	{r3, pc}
+ 216              	.L35:
+ 217 001a 00BF     		.align	2
+ 218              	.L34:
+ 219 001c 00000000 		.word	.LANCHOR0
+ 220 0020 00000000 		.word	.LANCHOR3
+ 222              		.section	.text.keyboardDisable,"ax",%progbits
+ 223              		.align	1
+ 224              		.global	keyboardDisable
+ 225              		.syntax unified
+ 226              		.thumb
+ 227              		.thumb_func
+ 229              	keyboardDisable:
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232 0000 08B5     		push	{r3, lr}
+ 233 0002 064B     		ldr	r3, .L38
+ 234 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 235 0006 064B     		ldr	r3, .L38+4
+ 236 0008 03EBC001 		add	r1, r3, r0, lsl #3
+ 237 000c 0122     		movs	r2, #1
+ 238 000e 8988     		ldrh	r1, [r1, #4]
+ 239 0010 53F83000 		ldr	r0, [r3, r0, lsl #3]
+ 240 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 241 0018 08BD     		pop	{r3, pc}
+ 242              	.L39:
+ 243 001a 00BF     		.align	2
+ 244              	.L38:
+ 245 001c 00000000 		.word	.LANCHOR0
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 5
+
+
+ 246 0020 00000000 		.word	.LANCHOR3
+ 248              		.section	.text.buttonScan,"ax",%progbits
+ 249              		.align	1
+ 250              		.global	buttonScan
+ 251              		.syntax unified
+ 252              		.thumb
+ 253              		.thumb_func
+ 255              	buttonScan:
+ 256              		@ args = 0, pretend = 0, frame = 0
+ 257              		@ frame_needed = 0, uses_anonymous_args = 0
+ 258 0000 38B5     		push	{r3, r4, r5, lr}
+ 259 0002 1446     		mov	r4, r2
+ 260 0004 E9B9     		cbnz	r1, .L41
+ 261 0006 2D4B     		ldr	r3, .L48
+ 262 0008 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 263 000a 2D4B     		ldr	r3, .L48+4
+ 264 000c 03EB8203 		add	r3, r3, r2, lsl #2
+ 265 0010 2C4A     		ldr	r2, .L48+8
+ 266 0012 1360     		str	r3, [r2]
+ 267 0014 2C48     		ldr	r0, .L48+12
+ 268              	.L42:
+ 269 0016 00EBC405 		add	r5, r0, r4, lsl #3
+ 270 001a A988     		ldrh	r1, [r5, #4]
+ 271 001c 50F83400 		ldr	r0, [r0, r4, lsl #3]
+ 272 0020 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 273 0024 30B9     		cbnz	r0, .L43
+ 274 0026 274B     		ldr	r3, .L48+8
+ 275 0028 1B68     		ldr	r3, [r3]
+ 276 002a 1B88     		ldrh	r3, [r3]
+ 277 002c 2341     		asrs	r3, r3, r4
+ 278 002e 13F0010F 		tst	r3, #1
+ 279 0032 0AD0     		beq	.L46
+ 280              	.L43:
+ 281 0034 A988     		ldrh	r1, [r5, #4]
+ 282 0036 2868     		ldr	r0, [r5]
+ 283 0038 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 284 003c 0128     		cmp	r0, #1
+ 285 003e 1CD0     		beq	.L47
+ 286              	.L40:
+ 287 0040 38BD     		pop	{r3, r4, r5, pc}
+ 288              	.L41:
+ 289 0042 204B     		ldr	r3, .L48+8
+ 290 0044 214A     		ldr	r2, .L48+16
+ 291 0046 1A60     		str	r2, [r3]
+ 292 0048 E5E7     		b	.L42
+ 293              	.L46:
+ 294 004a 4FF49670 		mov	r0, #300
+ 295 004e FFF7FEFF 		bl	usDelay
+ 296 0052 A988     		ldrh	r1, [r5, #4]
+ 297 0054 2868     		ldr	r0, [r5]
+ 298 0056 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 299 005a 0028     		cmp	r0, #0
+ 300 005c F0D1     		bne	.L40
+ 301 005e 1949     		ldr	r1, .L48+8
+ 302 0060 0868     		ldr	r0, [r1]
+ 303 0062 0122     		movs	r2, #1
+ 304 0064 02FA04F4 		lsl	r4, r2, r4
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 6
+
+
+ 305 0068 A4B2     		uxth	r4, r4
+ 306 006a 0388     		ldrh	r3, [r0]
+ 307 006c 2343     		orrs	r3, r3, r4
+ 308 006e 0380     		strh	r3, [r0]	@ movhi
+ 309 0070 0B68     		ldr	r3, [r1]
+ 310 0072 5A88     		ldrh	r2, [r3, #2]
+ 311 0074 1443     		orrs	r4, r4, r2
+ 312 0076 5C80     		strh	r4, [r3, #2]	@ movhi
+ 313 0078 E2E7     		b	.L40
+ 314              	.L47:
+ 315 007a 124B     		ldr	r3, .L48+8
+ 316 007c 1B68     		ldr	r3, [r3]
+ 317 007e 1B88     		ldrh	r3, [r3]
+ 318 0080 2341     		asrs	r3, r3, r4
+ 319 0082 13F0010F 		tst	r3, #1
+ 320 0086 DBD0     		beq	.L40
+ 321 0088 4FF49670 		mov	r0, #300
+ 322 008c FFF7FEFF 		bl	usDelay
+ 323 0090 A988     		ldrh	r1, [r5, #4]
+ 324 0092 2868     		ldr	r0, [r5]
+ 325 0094 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 326 0098 0128     		cmp	r0, #1
+ 327 009a D1D1     		bne	.L40
+ 328 009c 094A     		ldr	r2, .L48+8
+ 329 009e 1168     		ldr	r1, [r2]
+ 330 00a0 0123     		movs	r3, #1
+ 331 00a2 03FA04F4 		lsl	r4, r3, r4
+ 332 00a6 A4B2     		uxth	r4, r4
+ 333 00a8 0B88     		ldrh	r3, [r1]
+ 334 00aa 23EA0403 		bic	r3, r3, r4
+ 335 00ae 0B80     		strh	r3, [r1]	@ movhi
+ 336 00b0 1368     		ldr	r3, [r2]
+ 337 00b2 5A88     		ldrh	r2, [r3, #2]
+ 338 00b4 1443     		orrs	r4, r4, r2
+ 339 00b6 5C80     		strh	r4, [r3, #2]	@ movhi
+ 340 00b8 C2E7     		b	.L40
+ 341              	.L49:
+ 342 00ba 00BF     		.align	2
+ 343              	.L48:
+ 344 00bc 00000000 		.word	.LANCHOR0
+ 345 00c0 00000000 		.word	.LANCHOR2
+ 346 00c4 00000000 		.word	.LANCHOR5
+ 347 00c8 00000000 		.word	.LANCHOR4
+ 348 00cc 00000000 		.word	.LANCHOR1
+ 350              		.section	.text.keyboardScan,"ax",%progbits
+ 351              		.align	1
+ 352              		.global	keyboardScan
+ 353              		.syntax unified
+ 354              		.thumb
+ 355              		.thumb_func
+ 357              	keyboardScan:
+ 358              		@ args = 0, pretend = 0, frame = 0
+ 359              		@ frame_needed = 0, uses_anonymous_args = 0
+ 360 0000 10B5     		push	{r4, lr}
+ 361 0002 3220     		movs	r0, #50
+ 362 0004 FFF7FEFF 		bl	usDelay
+ 363 0008 124B     		ldr	r3, .L56
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 7
+
+
+ 364 000a 134A     		ldr	r2, .L56+4
+ 365 000c 1A60     		str	r2, [r3]
+ 366 000e 0024     		movs	r4, #0
+ 367 0010 124B     		ldr	r3, .L56+8
+ 368 0012 1C70     		strb	r4, [r3]
+ 369 0014 08E0     		b	.L51
+ 370              	.L52:
+ 371 0016 124B     		ldr	r3, .L56+12
+ 372 0018 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 373 001a 104B     		ldr	r3, .L56+8
+ 374 001c 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 375 001e 1148     		ldr	r0, .L56+16
+ 376 0020 FFF7FEFF 		bl	buttonScan
+ 377 0024 0134     		adds	r4, r4, #1
+ 378 0026 E4B2     		uxtb	r4, r4
+ 379              	.L51:
+ 380 0028 0B2C     		cmp	r4, #11
+ 381 002a 0ED8     		bhi	.L55
+ 382 002c 0C4B     		ldr	r3, .L56+12
+ 383 002e 1C70     		strb	r4, [r3]
+ 384 0030 082C     		cmp	r4, #8
+ 385 0032 F0D9     		bls	.L52
+ 386 0034 094B     		ldr	r3, .L56+8
+ 387 0036 0122     		movs	r2, #1
+ 388 0038 1A70     		strb	r2, [r3]
+ 389 003a 064B     		ldr	r3, .L56
+ 390 003c 094A     		ldr	r2, .L56+16
+ 391 003e 1A60     		str	r2, [r3]
+ 392 0040 A4F10903 		sub	r3, r4, #9
+ 393 0044 064A     		ldr	r2, .L56+12
+ 394 0046 1370     		strb	r3, [r2]
+ 395 0048 E5E7     		b	.L52
+ 396              	.L55:
+ 397 004a 6420     		movs	r0, #100
+ 398 004c FFF7FEFF 		bl	usDelay
+ 399 0050 10BD     		pop	{r4, pc}
+ 400              	.L57:
+ 401 0052 00BF     		.align	2
+ 402              	.L56:
+ 403 0054 00000000 		.word	.LANCHOR6
+ 404 0058 00000000 		.word	.LANCHOR4
+ 405 005c 00000000 		.word	.LANCHOR7
+ 406 0060 00000000 		.word	.LANCHOR8
+ 407 0064 00000000 		.word	.LANCHOR9
+ 409              		.global	type
+ 410              		.global	keyd
+ 411              		.global	keys
+ 412              		.global	matrix
+ 413              		.global	keycnt
+ 414              		.global	ebtnmatrix
+ 415              		.global	btnmatrix
+ 416              		.global	keyin
+ 417              		.global	keyout
+ 418              		.global	ekeys
+ 419              		.section	.bss.btnmatrix,"aw",%nobits
+ 420              		.align	2
+ 421              		.set	.LANCHOR2,. + 0
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 8
+
+
+ 424              	btnmatrix:
+ 425 0000 00000000 		.space	64
+ 425      00000000 
+ 425      00000000 
+ 425      00000000 
+ 425      00000000 
+ 426              		.section	.bss.ebtnmatrix,"aw",%nobits
+ 427              		.align	2
+ 428              		.set	.LANCHOR1,. + 0
+ 431              	ebtnmatrix:
+ 432 0000 00000000 		.space	4
+ 433              		.section	.bss.keycnt,"aw",%nobits
+ 434              		.set	.LANCHOR0,. + 0
+ 437              	keycnt:
+ 438 0000 00       		.space	1
+ 439              		.section	.bss.keyd,"aw",%nobits
+ 440              		.set	.LANCHOR8,. + 0
+ 443              	keyd:
+ 444 0000 00       		.space	1
+ 445              		.section	.bss.matrix,"aw",%nobits
+ 446              		.align	2
+ 447              		.set	.LANCHOR5,. + 0
+ 450              	matrix:
+ 451 0000 00000000 		.space	4
+ 452              		.section	.bss.type,"aw",%nobits
+ 453              		.set	.LANCHOR7,. + 0
+ 456              	type:
+ 457 0000 00       		.space	1
+ 458              		.section	.data.ekeys,"aw"
+ 459              		.align	2
+ 460              		.set	.LANCHOR9,. + 0
+ 463              	ekeys:
+ 464 0000 00080240 		.word	1073874944
+ 465 0004 0200     		.short	2
+ 466 0006 0000     		.space	2
+ 467 0008 00080240 		.word	1073874944
+ 468 000c 0400     		.short	4
+ 469 000e 0000     		.space	2
+ 470 0010 00080240 		.word	1073874944
+ 471 0014 0800     		.short	8
+ 472 0016 0000     		.space	2
+ 473              		.section	.data.keyin,"aw"
+ 474              		.align	2
+ 475              		.set	.LANCHOR4,. + 0
+ 478              	keyin:
+ 479 0000 000C0240 		.word	1073875968
+ 480 0004 0010     		.short	4096
+ 481 0006 0000     		.space	2
+ 482 0008 000C0240 		.word	1073875968
+ 483 000c 0008     		.short	2048
+ 484 000e 0000     		.space	2
+ 485 0010 000C0240 		.word	1073875968
+ 486 0014 0004     		.short	1024
+ 487 0016 0000     		.space	2
+ 488 0018 000C0240 		.word	1073875968
+ 489 001c 0002     		.short	512
+ 490 001e 0000     		.space	2
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 9
+
+
+ 491 0020 000C0240 		.word	1073875968
+ 492 0024 0001     		.short	256
+ 493 0026 0000     		.space	2
+ 494 0028 00040240 		.word	1073873920
+ 495 002c 0080     		.short	-32768
+ 496 002e 0000     		.space	2
+ 497 0030 00100240 		.word	1073876992
+ 498 0034 4000     		.short	64
+ 499 0036 0000     		.space	2
+ 500 0038 00080240 		.word	1073874944
+ 501 003c 0020     		.short	8192
+ 502 003e 0000     		.space	2
+ 503 0040 00080240 		.word	1073874944
+ 504 0044 0100     		.short	1
+ 505 0046 0000     		.space	2
+ 506              		.section	.data.keyout,"aw"
+ 507              		.align	2
+ 508              		.set	.LANCHOR3,. + 0
+ 511              	keyout:
+ 512 0000 000C0240 		.word	1073875968
+ 513 0004 0020     		.short	8192
+ 514 0006 0000     		.space	2
+ 515 0008 000C0240 		.word	1073875968
+ 516 000c 0040     		.short	16384
+ 517 000e 0000     		.space	2
+ 518 0010 000C0240 		.word	1073875968
+ 519 0014 0080     		.short	-32768
+ 520 0016 0000     		.space	2
+ 521 0018 00080240 		.word	1073874944
+ 522 001c 4000     		.short	64
+ 523 001e 0000     		.space	2
+ 524 0020 00080240 		.word	1073874944
+ 525 0024 8000     		.short	128
+ 526 0026 0000     		.space	2
+ 527 0028 00080240 		.word	1073874944
+ 528 002c 0001     		.short	256
+ 529 002e 0000     		.space	2
+ 530 0030 00080240 		.word	1073874944
+ 531 0034 0002     		.short	512
+ 532 0036 0000     		.space	2
+ 533 0038 00000240 		.word	1073872896
+ 534 003c 0001     		.short	256
+ 535 003e 0000     		.space	2
+ 536 0040 00000240 		.word	1073872896
+ 537 0044 0008     		.short	2048
+ 538 0046 0000     		.space	2
+ 539 0048 00000240 		.word	1073872896
+ 540 004c 0010     		.short	4096
+ 541 004e 0000     		.space	2
+ 542 0050 00000240 		.word	1073872896
+ 543 0054 0080     		.short	-32768
+ 544 0056 0000     		.space	2
+ 545 0058 00080240 		.word	1073874944
+ 546 005c 0004     		.short	1024
+ 547 005e 0000     		.space	2
+ 548 0060 00080240 		.word	1073874944
+ 549 0064 0008     		.short	2048
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 10
+
+
+ 550 0066 0000     		.space	2
+ 551 0068 00080240 		.word	1073874944
+ 552 006c 0010     		.short	4096
+ 553 006e 0000     		.space	2
+ 554 0070 000C0240 		.word	1073875968
+ 555 0074 0100     		.short	1
+ 556 0076 0000     		.space	2
+ 557 0078 000C0240 		.word	1073875968
+ 558 007c 0200     		.short	2
+ 559 007e 0000     		.space	2
+ 560              		.section	.data.keys,"aw"
+ 561              		.align	2
+ 562              		.set	.LANCHOR6,. + 0
+ 565              	keys:
+ 566 0000 00000000 		.word	keyin
+ 567              		.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 buttons.c
+/tmp/.private/user/cc7859rJ.s:18     .text.getKeyCounter:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:24     .text.getKeyCounter:0000000000000000 getKeyCounter
+/tmp/.private/user/cc7859rJ.s:34     .text.getKeyCounter:0000000000000008 $d
+/tmp/.private/user/cc7859rJ.s:37     .text.setKeyCounter:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:43     .text.setKeyCounter:0000000000000000 setKeyCounter
+/tmp/.private/user/cc7859rJ.s:53     .text.setKeyCounter:0000000000000008 $d
+/tmp/.private/user/cc7859rJ.s:56     .text.getEKeysMatrix:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:62     .text.getEKeysMatrix:0000000000000000 getEKeysMatrix
+/tmp/.private/user/cc7859rJ.s:74     .text.getEKeysMatrix:0000000000000010 $d
+/tmp/.private/user/cc7859rJ.s:77     .text.getKeysMatrix:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:83     .text.getKeysMatrix:0000000000000000 getKeysMatrix
+/tmp/.private/user/cc7859rJ.s:96     .text.getKeysMatrix:0000000000000014 $d
+/tmp/.private/user/cc7859rJ.s:99     .text.setKeysMatrix:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:105    .text.setKeysMatrix:0000000000000000 setKeysMatrix
+/tmp/.private/user/cc7859rJ.s:132    .text.setKeysMatrix:0000000000000038 $d
+/tmp/.private/user/cc7859rJ.s:135    .text.setEKeysMatrix:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:141    .text.setEKeysMatrix:0000000000000000 setEKeysMatrix
+/tmp/.private/user/cc7859rJ.s:164    .text.setEKeysMatrix:000000000000002c $d
+/tmp/.private/user/cc7859rJ.s:167    .text.keyboardStart:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:173    .text.keyboardStart:0000000000000000 keyboardStart
+/tmp/.private/user/cc7859rJ.s:194    .text.keyboardStart:0000000000000020 $d
+/tmp/.private/user/cc7859rJ.s:197    .text.keyboardEnable:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:203    .text.keyboardEnable:0000000000000000 keyboardEnable
+/tmp/.private/user/cc7859rJ.s:219    .text.keyboardEnable:000000000000001c $d
+/tmp/.private/user/cc7859rJ.s:223    .text.keyboardDisable:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:229    .text.keyboardDisable:0000000000000000 keyboardDisable
+/tmp/.private/user/cc7859rJ.s:245    .text.keyboardDisable:000000000000001c $d
+/tmp/.private/user/cc7859rJ.s:249    .text.buttonScan:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:255    .text.buttonScan:0000000000000000 buttonScan
+/tmp/.private/user/cc7859rJ.s:344    .text.buttonScan:00000000000000bc $d
+/tmp/.private/user/cc7859rJ.s:351    .text.keyboardScan:0000000000000000 $t
+/tmp/.private/user/cc7859rJ.s:357    .text.keyboardScan:0000000000000000 keyboardScan
+/tmp/.private/user/cc7859rJ.s:403    .text.keyboardScan:0000000000000054 $d
+/tmp/.private/user/cc7859rJ.s:456    .bss.type:0000000000000000 type
+/tmp/.private/user/cc7859rJ.s:443    .bss.keyd:0000000000000000 keyd
+/tmp/.private/user/cc7859rJ.s:565    .data.keys:0000000000000000 keys
+/tmp/.private/user/cc7859rJ.s:450    .bss.matrix:0000000000000000 matrix
+/tmp/.private/user/cc7859rJ.s:437    .bss.keycnt:0000000000000000 keycnt
+/tmp/.private/user/cc7859rJ.s:431    .bss.ebtnmatrix:0000000000000000 ebtnmatrix
+/tmp/.private/user/cc7859rJ.s:424    .bss.btnmatrix:0000000000000000 btnmatrix
+/tmp/.private/user/cc7859rJ.s:478    .data.keyin:0000000000000000 keyin
+/tmp/.private/user/cc7859rJ.s:511    .data.keyout:0000000000000000 keyout
+/tmp/.private/user/cc7859rJ.s:463    .data.ekeys:0000000000000000 ekeys
+/tmp/.private/user/cc7859rJ.s:420    .bss.btnmatrix:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:427    .bss.ebtnmatrix:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:438    .bss.keycnt:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:444    .bss.keyd:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:446    .bss.matrix:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:457    .bss.type:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:459    .data.ekeys:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:474    .data.keyin:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:507    .data.keyout:0000000000000000 $d
+/tmp/.private/user/cc7859rJ.s:561    .data.keys:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+ARM GAS  /tmp/.private/user/cc7859rJ.s 			page 12
+
+
+HAL_GPIO_WritePin
+HAL_GPIO_ReadPin
+usDelay

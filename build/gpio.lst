@@ -1,0 +1,189 @@
+ARM GAS  /tmp/.private/user/ccPlZNPa.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"gpio.c"
+  16              		.text
+  17              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_GPIO_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	MX_GPIO_Init:
+  25              		@ args = 0, pretend = 0, frame = 40
+  26              		@ frame_needed = 0, uses_anonymous_args = 0
+  27 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+  28 0004 8BB0     		sub	sp, sp, #44
+  29 0006 0024     		movs	r4, #0
+  30 0008 0594     		str	r4, [sp, #20]
+  31 000a 0694     		str	r4, [sp, #24]
+  32 000c 0794     		str	r4, [sp, #28]
+  33 000e 0894     		str	r4, [sp, #32]
+  34 0010 0994     		str	r4, [sp, #36]
+  35 0012 0094     		str	r4, [sp]
+  36 0014 4E4B     		ldr	r3, .L3
+  37 0016 1A6B     		ldr	r2, [r3, #48]
+  38 0018 42F01002 		orr	r2, r2, #16
+  39 001c 1A63     		str	r2, [r3, #48]
+  40 001e 1A6B     		ldr	r2, [r3, #48]
+  41 0020 02F01002 		and	r2, r2, #16
+  42 0024 0092     		str	r2, [sp]
+  43 0026 009A     		ldr	r2, [sp]
+  44 0028 0194     		str	r4, [sp, #4]
+  45 002a 1A6B     		ldr	r2, [r3, #48]
+  46 002c 42F00402 		orr	r2, r2, #4
+  47 0030 1A63     		str	r2, [r3, #48]
+  48 0032 1A6B     		ldr	r2, [r3, #48]
+  49 0034 02F00402 		and	r2, r2, #4
+  50 0038 0192     		str	r2, [sp, #4]
+  51 003a 019A     		ldr	r2, [sp, #4]
+  52 003c 0294     		str	r4, [sp, #8]
+  53 003e 1A6B     		ldr	r2, [r3, #48]
+  54 0040 42F00102 		orr	r2, r2, #1
+  55 0044 1A63     		str	r2, [r3, #48]
+  56 0046 1A6B     		ldr	r2, [r3, #48]
+  57 0048 02F00102 		and	r2, r2, #1
+  58 004c 0292     		str	r2, [sp, #8]
+ARM GAS  /tmp/.private/user/ccPlZNPa.s 			page 2
+
+
+  59 004e 029A     		ldr	r2, [sp, #8]
+  60 0050 0394     		str	r4, [sp, #12]
+  61 0052 1A6B     		ldr	r2, [r3, #48]
+  62 0054 42F00202 		orr	r2, r2, #2
+  63 0058 1A63     		str	r2, [r3, #48]
+  64 005a 1A6B     		ldr	r2, [r3, #48]
+  65 005c 02F00202 		and	r2, r2, #2
+  66 0060 0392     		str	r2, [sp, #12]
+  67 0062 039A     		ldr	r2, [sp, #12]
+  68 0064 0494     		str	r4, [sp, #16]
+  69 0066 1A6B     		ldr	r2, [r3, #48]
+  70 0068 42F00802 		orr	r2, r2, #8
+  71 006c 1A63     		str	r2, [r3, #48]
+  72 006e 1B6B     		ldr	r3, [r3, #48]
+  73 0070 03F00803 		and	r3, r3, #8
+  74 0074 0493     		str	r3, [sp, #16]
+  75 0076 049B     		ldr	r3, [sp, #16]
+  76 0078 DFF8E490 		ldr	r9, .L3+16
+  77 007c 2246     		mov	r2, r4
+  78 007e 49F6CF11 		movw	r1, #39375
+  79 0082 4846     		mov	r0, r9
+  80 0084 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  81 0088 DFF8D880 		ldr	r8, .L3+20
+  82 008c 2246     		mov	r2, r4
+  83 008e 4EF2FF01 		movw	r1, #57599
+  84 0092 4046     		mov	r0, r8
+  85 0094 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  86 0098 2E4F     		ldr	r7, .L3+4
+  87 009a 2246     		mov	r2, r4
+  88 009c 4FF4FE51 		mov	r1, #8128
+  89 00a0 3846     		mov	r0, r7
+  90 00a2 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  91 00a6 2C4E     		ldr	r6, .L3+8
+  92 00a8 2246     		mov	r2, r4
+  93 00aa E821     		movs	r1, #232
+  94 00ac 3046     		mov	r0, r6
+  95 00ae FFF7FEFF 		bl	HAL_GPIO_WritePin
+  96 00b2 4023     		movs	r3, #64
+  97 00b4 0593     		str	r3, [sp, #20]
+  98 00b6 0694     		str	r4, [sp, #24]
+  99 00b8 0125     		movs	r5, #1
+ 100 00ba 0795     		str	r5, [sp, #28]
+ 101 00bc 05A9     		add	r1, sp, #20
+ 102 00be 2748     		ldr	r0, .L3+12
+ 103 00c0 FFF7FEFF 		bl	HAL_GPIO_Init
+ 104 00c4 42F20F03 		movw	r3, #8207
+ 105 00c8 0593     		str	r3, [sp, #20]
+ 106 00ca 0694     		str	r4, [sp, #24]
+ 107 00cc 0795     		str	r5, [sp, #28]
+ 108 00ce 05A9     		add	r1, sp, #20
+ 109 00d0 3846     		mov	r0, r7
+ 110 00d2 FFF7FEFF 		bl	HAL_GPIO_Init
+ 111 00d6 49F6CF13 		movw	r3, #39375
+ 112 00da 0593     		str	r3, [sp, #20]
+ 113 00dc 0695     		str	r5, [sp, #24]
+ 114 00de 0794     		str	r4, [sp, #28]
+ 115 00e0 0894     		str	r4, [sp, #32]
+ARM GAS  /tmp/.private/user/ccPlZNPa.s 			page 3
+
+
+ 116 00e2 05A9     		add	r1, sp, #20
+ 117 00e4 4846     		mov	r0, r9
+ 118 00e6 FFF7FEFF 		bl	HAL_GPIO_Init
+ 119 00ea 4FF40043 		mov	r3, #32768
+ 120 00ee 0593     		str	r3, [sp, #20]
+ 121 00f0 0694     		str	r4, [sp, #24]
+ 122 00f2 0795     		str	r5, [sp, #28]
+ 123 00f4 05A9     		add	r1, sp, #20
+ 124 00f6 3046     		mov	r0, r6
+ 125 00f8 FFF7FEFF 		bl	HAL_GPIO_Init
+ 126 00fc 4FF4F853 		mov	r3, #7936
+ 127 0100 0593     		str	r3, [sp, #20]
+ 128 0102 0694     		str	r4, [sp, #24]
+ 129 0104 0795     		str	r5, [sp, #28]
+ 130 0106 05A9     		add	r1, sp, #20
+ 131 0108 4046     		mov	r0, r8
+ 132 010a FFF7FEFF 		bl	HAL_GPIO_Init
+ 133 010e 4EF2FF03 		movw	r3, #57599
+ 134 0112 0593     		str	r3, [sp, #20]
+ 135 0114 0695     		str	r5, [sp, #24]
+ 136 0116 0794     		str	r4, [sp, #28]
+ 137 0118 0894     		str	r4, [sp, #32]
+ 138 011a 05A9     		add	r1, sp, #20
+ 139 011c 4046     		mov	r0, r8
+ 140 011e FFF7FEFF 		bl	HAL_GPIO_Init
+ 141 0122 4FF4FE53 		mov	r3, #8128
+ 142 0126 0593     		str	r3, [sp, #20]
+ 143 0128 0695     		str	r5, [sp, #24]
+ 144 012a 0794     		str	r4, [sp, #28]
+ 145 012c 0894     		str	r4, [sp, #32]
+ 146 012e 05A9     		add	r1, sp, #20
+ 147 0130 3846     		mov	r0, r7
+ 148 0132 FFF7FEFF 		bl	HAL_GPIO_Init
+ 149 0136 E823     		movs	r3, #232
+ 150 0138 0593     		str	r3, [sp, #20]
+ 151 013a 0695     		str	r5, [sp, #24]
+ 152 013c 0794     		str	r4, [sp, #28]
+ 153 013e 0894     		str	r4, [sp, #32]
+ 154 0140 05A9     		add	r1, sp, #20
+ 155 0142 3046     		mov	r0, r6
+ 156 0144 FFF7FEFF 		bl	HAL_GPIO_Init
+ 157 0148 0BB0     		add	sp, sp, #44
+ 158              		@ sp needed
+ 159 014a BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 160              	.L4:
+ 161 014e 00BF     		.align	2
+ 162              	.L3:
+ 163 0150 00380240 		.word	1073887232
+ 164 0154 00080240 		.word	1073874944
+ 165 0158 00040240 		.word	1073873920
+ 166 015c 00100240 		.word	1073876992
+ 167 0160 00000240 		.word	1073872896
+ 168 0164 000C0240 		.word	1073875968
+ 170              		.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"
+ARM GAS  /tmp/.private/user/ccPlZNPa.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gpio.c
+/tmp/.private/user/ccPlZNPa.s:18     .text.MX_GPIO_Init:0000000000000000 $t
+/tmp/.private/user/ccPlZNPa.s:24     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
+/tmp/.private/user/ccPlZNPa.s:163    .text.MX_GPIO_Init:0000000000000150 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init
