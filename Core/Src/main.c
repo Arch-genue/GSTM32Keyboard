@@ -24,7 +24,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "buttons.h"
+#include "leds.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,93 +36,29 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-pint ekeys[3] = {
-    {GPIOC, GPIO_PIN_1},
-    {GPIOC, GPIO_PIN_2},
-    {GPIOC, GPIO_PIN_3}};
-
-pint ekeysleds[4] = {
-    {GPIOA, GPIO_PIN_0},
-    {GPIOA, GPIO_PIN_1},
-    {GPIOA, GPIO_PIN_2},
-    {GPIOA, GPIO_PIN_3},
-};
-pint keyout[KEYOUTS] = {
-    {GPIOD, GPIO_PIN_13}, // 15
-    {GPIOD, GPIO_PIN_14}, // 14
-    {GPIOD, GPIO_PIN_15}, // 13
-    {GPIOC, GPIO_PIN_6},  // 12
-
-    {GPIOC, GPIO_PIN_7}, // 11
-    {GPIOC, GPIO_PIN_8}, // 10
-    {GPIOC, GPIO_PIN_9}, // 9
-    {GPIOA, GPIO_PIN_8}, // 8
-
-    {GPIOA, GPIO_PIN_11}, // 7
-    {GPIOA, GPIO_PIN_12}, // 6
-    {GPIOA, GPIO_PIN_15}, // 5
-    {GPIOC, GPIO_PIN_10}, // 4
-
-    {GPIOC, GPIO_PIN_11}, // 3
-    {GPIOC, GPIO_PIN_12}, // 2
-    {GPIOD, GPIO_PIN_0},  // 1
-    {GPIOD, GPIO_PIN_1},  // 0
-};
-
-pint leds[LEDS] = {
-    {GPIOD, GPIO_PIN_2}, // 0
-    {GPIOD, GPIO_PIN_3}, // 1
-    {GPIOD, GPIO_PIN_4}, // 2
-    {GPIOD, GPIO_PIN_5}, // 3
-
-    {GPIOD, GPIO_PIN_6}, // 4
-    {GPIOD, GPIO_PIN_7}, // 5
-    {GPIOB, GPIO_PIN_3}, // 6
-    {GPIOB, GPIO_PIN_5}, // 7
-
-    {GPIOB, GPIO_PIN_6}, // 8
-    {GPIOB, GPIO_PIN_7}  // 9
-};
-
-pint keyin[KEYINS] = {
-    {GPIOD, GPIO_PIN_12},
-    {GPIOD, GPIO_PIN_11},
-    {GPIOD, GPIO_PIN_10},
-    {GPIOD, GPIO_PIN_9},
-
-    {GPIOD, GPIO_PIN_8},
-    {GPIOB, GPIO_PIN_15},
-    {GPIOE, GPIO_PIN_6},
-    {GPIOC, GPIO_PIN_13},
-
-    {GPIOC, GPIO_PIN_0},
-};
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+void usDelay(uint16_t usec) {
+    __HAL_TIM_SET_COUNTER(&htim10, 0); 
+    while (__HAL_TIM_GET_COUNTER(&htim10) < usec);
+}
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-const uint8_t banledscols[7] = {0x07,0x08,0x09,0x0a,0x0b,0x0d,0x0e};
-
-//Flags
-uint8_t ledmatrix[LEDS_KEYOUTS]; // Optimized
-uint16_t btnmatrix[KEYOUTS][2];  // Optimized
-uint8_t ebtnmatrix[2];           // Optimized
+uint8_t ENABLED = 0;
 
 //Buffers
 uint8_t txbuff[5];
 uint8_t rxbuff[5];
 
-//tmp
+//Tmp
 int32_t prevCounter = 0;
-uint8_t keycols = 0;
 uint8_t mode = 1;
+uint8_t keycols = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -140,63 +77,42 @@ uint8_t find(uint8_t *array, const uint8_t count, const uint8_t value) {
     return 0;
 }
 
-/*--LED FUNCTIONS--*/
-void ledView(uint8_t key, uint8_t led, uint8_t st)
-{
-    ledmatrix[key] = bitWrite(ledmatrix[key], led, st);
-}
-
-void ledsAll(uint8_t st)
-{
-    st = st ? 1 : 0;
-    for (uint8_t i = 0; i < KEYOUTS; i++)
-    {
-        for (uint8_t j = 0; j < LEDS; j++)
-        {
-            ledmatrix[i] = bitWrite(ledmatrix[i], j, st);
-        }
-    }
-}
-
 /*--UART FUNCTIONS--*/
 void uart_rx()
 {
     if (HAL_UART_Receive_IT(&huart1, rxbuff, 3) != HAL_BUSY)
     {
-        if (rxbuff[0] == 0xaa && rxbuff[1] == 0xbb)
-            (rxbuff[2] == 0xff) ? ledsAll(1) : ledsAll(0);
-        else if (rxbuff[0] < KEYOUTS && rxbuff[1] < LEDS)
-            ledView(rxbuff[0], rxbuff[1], (rxbuff[2] == 0xff) ? 1 : 0);
+        if (rxbuff[0] == 0xdd && rxbuff[1] == 0xee){
+            ENABLED = (rxbuff[2] == 0xff) ? 1 : 0;
+        } else if (ENABLED) {
+            if (rxbuff[0] == 0xaa && rxbuff[1] == 0xbb)
+                (rxbuff[2] == 0xff) ? ledsAll(1) : ledsAll(0);
+            else if (rxbuff[0] < KEYOUTS && rxbuff[1] < LEDS)
+                ledView(rxbuff[0], rxbuff[1], (rxbuff[2] == 0xff) ? 1 : 0);
+        }
     }
 }
 
 void uart_tx()
 {
+
     //Main buttons
-    for (uint8_t y = 0; y < KEYINS; y++)
-    {
-        if (bitRead(btnmatrix[keycols][1], y) == 1)
-        {
-            txbuff[0] = keycols;
-            txbuff[1] = y;
-            txbuff[2] = (bitRead(btnmatrix[keycols][0], y) == 1) ? 0xFF : 0x00;
+    for (uint8_t key = 0; key < KEYINS + 3; key++) {
+        if (getKeysMatrix(keycols, 1, key) == 1 || ( key >= KEYINS && getEKeysMatrix(1, key-9) == 1 )) {
+            if (key < KEYINS) {
+                txbuff[0] = keycols;
+                txbuff[1] = key;
+                txbuff[2] = getKeysMatrix(keycols, 0, key) == 1 ? 0xFF : 0x00;
 
-            bitWrite(btnmatrix[keycols][1], y, 0);
-            HAL_UART_Transmit_IT(&huart1, &txbuff, 3);
-        }
-    }
+                setKeysMatrix(keycols, 1, key, 0);
+            } else {
+                txbuff[0] = 0xAA;
+                txbuff[1] = (key-9 == 0) ? 0xAB : (key-9 == 1) ? 0xAC : 0xAD;
+                txbuff[2] = getEKeysMatrix(0, key-9) == 1 ? 0xFF : 0x00;
 
-    //Special buttons
-    for (uint8_t u = 0; u < 3; u++)
-    {
-        if (bitRead(ebtnmatrix[1], u) == 1)
-        {
-            txbuff[0] = 0xAA;
-            txbuff[1] = (u == 0) ? 0xAB : (u == 1) ? 0xAC : 0xAD;
-            txbuff[2] = (bitRead(ebtnmatrix[0], u) == 1) ? 0xFF : 0x00;
-
-            bitWrite(ebtnmatrix[1], u, 0);
-            HAL_UART_Transmit_IT(&huart1, &txbuff, 3);
+                setEKeysMatrix(1, key-9, 0);
+            }
+            HAL_UART_Transmit_IT(&huart1, txbuff, 3);
         }
     }
 
@@ -204,83 +120,6 @@ void uart_tx()
 #ifdef USE_ENCODER
     scanEncoder();
 #endif
-}
-
-void scanKeyboard()
-{
-    usDelay(50);
-
-    // Special buttons
-    for (uint8_t u = 0; u < 3; u++)
-    {
-        if (u == 2) {
-            if (readPin(ekeys[2].port, ekeys[2].pin) == GPIO_PIN_RESET && bitRead(ebtnmatrix[0], 2) == 1) {
-                bitWrite(ebtnmatrix[0], 2, 0);
-                bitWrite(ebtnmatrix[1], 2, 1);
-            } else if (readPin(ekeys[2].port, ekeys[2].pin) == GPIO_PIN_SET && bitRead(ebtnmatrix[0], 2) == 0) {
-                bitWrite(ebtnmatrix[0], 2, 1);
-                bitWrite(ebtnmatrix[1], 2, 1);
-            }
-            break;
-        }
-        if (readPin(ekeys[u].port, ekeys[u].pin) == GPIO_PIN_RESET && bitRead(ebtnmatrix[0], u) == 0)
-        {
-            bitWrite(ebtnmatrix[0], u, 1);
-            bitWrite(ebtnmatrix[1], u, 1);
-        }
-        else if (readPin(ekeys[u].port, ekeys[u].pin) == GPIO_PIN_SET && bitRead(ebtnmatrix[0], u) == 1)
-        {
-            bitWrite(ebtnmatrix[0], u, 0);
-            bitWrite(ebtnmatrix[1], u, 1);
-        }
-    }
-    // Main keyboard
-    for (uint8_t b = 0; b < KEYINS; b++)
-    {
-        if (readPin(keyin[b].port, keyin[b].pin) == 0 && bitRead(btnmatrix[keycols][0], b) == 0)
-        {
-            usDelay(300);
-            if (readPin(keyin[b].port, keyin[b].pin) == 0)
-            {
-                bitWrite(btnmatrix[keycols][0], b, 1);
-                bitWrite(btnmatrix[keycols][1], b, 1);
-            }
-        }
-        else if (readPin(keyin[b].port, keyin[b].pin) == 1 && bitRead(btnmatrix[keycols][0], b) == 1)
-        {
-            usDelay(300);
-            if (readPin(keyin[b].port, keyin[b].pin) == 1)
-            {
-                bitWrite(btnmatrix[keycols][0], b, 0);
-                bitWrite(btnmatrix[keycols][1], b, 1);
-            }
-        }
-    }
-    usDelay(100);
-}
-
-void ledsView()
-{
-    if ( find(&banledscols, 7, keycols) ) return;
-
-    for (uint8_t led = 0; led < LEDS; led++)
-    {
-        uint8_t ldst = (led == 8) ? 4 : ( (led == 9) ? 5 : led );
-        uint8_t keycol = (led == 8 || led == 9) ? 7 : keycols;
-
-        writePin(leds[led].port, leds[led].pin, !bitRead(ledmatrix[keycol], ldst));
-    }
-
-    for (int l = 0; l < 4; l++)
-    {
-        writePin(ekeysleds[l].port, ekeysleds[l].pin, !bitRead(ledmatrix[7], l));
-    }
-    usDelay(600);
-    for (int led = 0; led < LEDS; led++)
-    {
-        writePin(leds[led].port, leds[led].pin, 1);
-    }
-    usDelay(200);
 }
 
 #ifdef USE_ENCODER
@@ -344,19 +183,12 @@ int main(void)
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    /* --DISABLE KEYOUTS-- */
-    for (int d = 0; d < KEYOUTS; d++)
-    {
-        writePin(keyout[d].port, keyout[d].pin, 1);
-    }
 
-    /* --DISABLE LEDS-- */
-    for (int d = 0; d < LEDS; d++)
-    {
-        writePin(leds[d].port, leds[d].pin, 1);
-    }
+    keyboardStart();
 
     ledsAll(0);
+    ledsView();
+    
     writePin(GPIOA, GPIO_PIN_6, 1);
     writePin(GPIOA, GPIO_PIN_7, 1);
 
@@ -365,29 +197,40 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+        uart_rx();
+        if (!ENABLED) {
+            ledsAll(0);
+            ledsView();
+            keyboardStart();
+            keycols = KEYOUTS;
+            mode = 0;
+            continue;
+        }
+
         if (keycols == KEYOUTS)
         {
             keycols = 0;
+            setKeyCounter(keycols);
             mode = !mode;
         }
 
-        uart_rx();
-        
-        // ENABLE KEYBOARD
-        writePin(keyout[keycols].port, keyout[keycols].pin, 0);
+        setKeyCounter(keycols);
 
+        keyboardEnable(); //! ENABLE KEYBOARD
+        
         if (mode)
-            scanKeyboard();
+            keyboardScan();
         else {
             ledsView();
             uart_tx();
         }
 
-        // DISABLE KEYBOARD
-        writePin(keyout[keycols].port, keyout[keycols].pin, 1);
+        keyboardDisable(); //! DISABLE KEYBOARD
+        
         if (!mode) usDelay(500);
 
         keycols++;
+        
     }
   /* USER CODE END 3 */
 }

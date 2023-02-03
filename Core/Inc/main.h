@@ -36,7 +36,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-typedef struct
+typedef struct 
 {
     GPIO_TypeDef *port;
     uint16_t pin;
@@ -60,8 +60,6 @@ typedef struct
 #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
 #define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
 
-#define usDelay(usec) __HAL_TIM_SET_COUNTER(&htim10, 0); while (__HAL_TIM_GET_COUNTER(&htim10) < usec);
-
 //* PIN
 #define readPin(port, pin) HAL_GPIO_ReadPin(port, pin)
 #define writePin(port, pin, state) HAL_GPIO_WritePin(port, pin, state)
@@ -73,7 +71,7 @@ typedef struct
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void usDelay(uint16_t usec);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

@@ -40,6 +40,8 @@ Core/Src/main.c \
 Core/Src/stm32f4xx_it.c \
 Core/Src/stm32f4xx_hal_msp.c \
 Core/Src/system_stm32f4xx.c \
+Core/Src/buttons.c \
+Core/Src/leds.c \
 Core/Src/gpio.c \
 Core/Src/tim.c \
 Core/Src/usart.c \
